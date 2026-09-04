@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Des Program - منتجاتنا الذكية</title>
+    <title>Des Program - منتجاتنا وأسعارنا</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -18,20 +18,34 @@
         nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: 0.3s; }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
         .products { padding: 130px 5% 80px; max-width: 1300px; margin: 0 auto; }
-        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 50px; font-weight: 900; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 15px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-        .product-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; }
+        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 50px; font-size: 1.1rem; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .product-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; position: relative; }
         .product-card:hover { transform: translateY(-8px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15); }
-        .product-img-container { width: 100%; height: 260px; overflow: hidden; background: #000; }
+        .product-img-container { width: 100%; height: 260px; overflow: hidden; background: #000; position: relative; }
         .product-img-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .watermark-logo { position: absolute; bottom: 10px; left: 10px; height: 30px; opacity: 0.8; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); padding: 2px; }
         .product-card:hover .product-img-container img { transform: scale(1.05); }
         .product-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-        .product-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 12px; color: var(--primary-blue); }
-        .product-desc { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 25px; line-height: 1.6; }
+        .product-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; color: var(--primary-blue); }
+        .price-list { list-style: none; margin-bottom: 20px; }
+        .price-list li { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 8px; display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 6px; }
+        .price-list li span { color: #fff; font-weight: 700; }
+        .note { font-size: 0.85rem; color: #ff007f; margin-bottom: 20px; background: rgba(255,0,127,0.1); padding: 8px; border-radius: 6px; text-align: center; }
+        .web-service-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; text-align: center; margin-top: 40px; }
+        .web-service-section h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--primary-blue); }
+        .web-service-section p { color: var(--text-muted); margin-bottom: 25px; font-size: 1.1rem; line-height: 1.6; }
+        .social-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .social-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 700; color: #fff; transition: 0.3s; }
+        .whatsapp-btn { background: #25d366; box-shadow: 0 0 15px rgba(37, 211, 102, 0.4); }
+        .whatsapp-btn:hover { background: #20ba5a; transform: translateY(-3px); }
+        .instagram-btn { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #fd1d1d); box-shadow: 0 0 15px rgba(193, 53, 132, 0.4); }
+        .instagram-btn:hover { opacity: 0.9; transform: translateY(-3px); }
         .product-btn { display: block; text-align: center; background: transparent; border: 1px solid var(--primary-blue); color: var(--primary-blue); padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 700; transition: 0.3s; }
         .product-btn:hover { background: var(--accent-gradient); border-color: transparent; color: #fff; }
-        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; }
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; margin-top: 50px; }
     </style>
 </head>
 <body>
@@ -52,37 +66,78 @@
     </header>
 
     <section class="products">
-        <h2 class="section-title">حلولنا <span>الذكية والمميزة</span></h2>
+        <h2 class="section-title">منتجاتنا <span>والأسعار المعتمدة</span></h2>
+        <p class="section-subtitle">اختر المنتج المناسب لك ولنشاطك التجاري</p>
+
         <div class="products-grid">
+            <!-- بطاقة NFC -->
             <div class="product-card">
-                <div class="product-img-container"><img src="nfccard.png" alt="بطاقة NFC مبرمجة"></div>
+                <div class="product-img-container">
+                    <img src="nfccard.png" alt="بطاقة NFC">
+                    <img src="dess.jpg" alt="Logo" class="watermark-logo">
+                </div>
                 <div class="product-content">
                     <div>
-                        <h3 class="product-title">بطاقة NFC مبرمجة</h3>
-                        <p class="product-desc">بطاقة ذكية وآمنة تتيح لك مشاركة معلوماتك، موقعك، أو وسائل التواصل الخاصة بك بلمسة واحدة سريعة ومتوافقة مع جميع الأجهزة.</p>
+                        <h3 class="product-title">بطاقة NFC الذكية</h3>
+                        <ul class="price-list">
+                            <li>إذا الموقع من الزبون: <span>50 شيكل</span></li>
+                            <li>شامل البرمجة وربط NFC: <span>100 شيكل</span></li>
+                        </ul>
                     </div>
-                    <a href="contact.html" class="product-btn">اطلب بطاقتك الآن</a>
+                    <a href="https://wa.me/رقمك_هنا" target="_blank" class="product-btn">اطلب المنتج الآن</a>
                 </div>
             </div>
+
+            <!-- درع CNC NFC -->
             <div class="product-card">
-                <div class="product-img-container"><img src="acrelac.jpg" alt="درع أكريليك مبرمج"></div>
-                <div class="product-content">
-                    <div>
-                        <h3 class="product-title">درع أكريليك مبرمج NFC</h3>
-                        <p class="product-desc">درع مكتبي فخم مصنوع من الأكريليك الشفاف، مدمج بتقنية الـ NFC وبرمجة مخصصة للمواقع ووسائل التواصل لتفاعل لحظي مبهر.</p>
-                    </div>
-                    <a href="contact.html" class="product-btn">اطلب الدرع الآن</a>
+                <div class="product-img-container">
+                    <img src="ccncard.jpg" alt="درع CNC NFC">
+                    <img src="dess.jpg" alt="Logo" class="watermark-logo">
                 </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img-container"><img src="ccncard.jpg" alt="درع CNC مبرمج بتقنية NFC"></div>
                 <div class="product-content">
                     <div>
                         <h3 class="product-title">درع CNC بتقنية NFC</h3>
-                        <p class="product-desc">تصميم هندسي متين ومحفور بدقة عالية باستخدام تقنية الـ CNC مع دمج ذكي لتقنية الـ NFC ليعكس هوية شركتك واحترافيتها.</p>
+                        <ul class="price-list">
+                            <li>إذا الموقع من الزبون: <span>80 شيكل</span></li>
+                            <li>شامل البرمجة وربط NFC: <span>140 شيكل</span></li>
+                        </ul>
+                        <div class="note">ملاحظة: للكميات السعر يختلف (خاص لأصحاب المصالح)</div>
                     </div>
-                    <a href="contact.html" class="product-btn">اطلب الدرع الآن</a>
+                    <a href="https://wa.me/رقمك_هنا" target="_blank" class="product-btn">اطلب المنتج الآن</a>
                 </div>
+            </div>
+
+            <!-- درع أكريليك NFC -->
+            <div class="product-card">
+                <div class="product-img-container">
+                    <img src="acrelac.jpg" alt="درع أكريليك NFC">
+                    <img src="dess.jpg" alt="Logo" class="watermark-logo">
+                </div>
+                <div class="product-content">
+                    <div>
+                        <h3 class="product-title">درع أكريليك NFC</h3>
+                        <ul class="price-list">
+                            <li>إذا الموقع من الزبون: <span>100 شيكل</span></li>
+                            <li>شامل البرمجة وربط NFC: <span>160 شيكل</span></li>
+                        </ul>
+                    </div>
+                    <a href="https://wa.me/رقمك_هنا" target="_blank" class="product-btn">اطلب المنتج الآن</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم برمجة وتصميم مواقع الويب -->
+        <div class="web-service-section">
+            <h3>خدمة برمجة وتصميم مواقع الويب</h3>
+            <p>نصمم ونبرمع مواقع إلكترونية احترافية مخصصة بالكامل حسب طلب الزبون وحاجته لتناسب نشاطك التجاري بدقة عالية.</p>
+            <p style="color: #fff; font-weight: 700; margin-bottom: 20px;">لتفاصيل أكثر والطلب، تواصل معنا مباشرة عبر:</p>
+            <div class="social-buttons">
+                <a href="https://wa.me/رقمك_هنا" target="_blank" class="social-btn whatsapp-btn">
+                    <i class="fa-brands fa-whatsapp fa-lg"></i> واتساب
+                </a>
+                <a href="https://instagram.com/اسم_حسابك" target="_blank" class="social-btn instagram-btn">
+                    <i class="fa-brands fa-instagram fa-lg"></i> انستغرام
+                </a>
             </div>
         </div>
     </section>
