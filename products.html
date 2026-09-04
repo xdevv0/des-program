@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- مكتبة Firebase v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
@@ -30,9 +31,9 @@
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
         .product-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; position: relative; }
         .product-card:hover { transform: translateY(-8px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15); }
-        .product-img-container { width: 100%; height: 240px; overflow: hidden; background: #000; position: relative; }
+        .product-img-container { width: 100%; height: 240px; overflow: hidden; background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
         .product-img-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .watermark-logo { position: absolute; bottom: 10px; left: 10px; height: 32px; opacity: 0.85; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.6); padding: 2px; }
+        .watermark-logo { position: absolute; bottom: 10px; left: 10px; height: 32px !important; width: auto !important; opacity: 0.85; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.6); padding: 2px; }
         .product-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
         .product-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; color: var(--primary-blue); }
         
@@ -41,7 +42,6 @@
         .price-list li span { color: #fff; font-weight: 700; }
         .note { font-size: 0.8rem; color: #ff007f; margin-bottom: 15px; background: rgba(255,0,127,0.1); padding: 6px; border-radius: 6px; text-align: center; }
 
-        /* نموذج الطلب الرسمي */
         .order-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; max-width: 800px; margin: 0 auto; }
         .order-section h3 { font-size: 1.8rem; text-align: center; margin-bottom: 25px; color: #fff; }
         .order-section h3 span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -62,7 +62,7 @@
 <body>
     <header>
         <div class="logo-container">
-            <img src="dess.jpg" alt="Des Program Logo">
+            <img src="dess.jpg" alt="Des Program Logo" onerror="this.style.display='none'">
             <span class="logo-text">Des Program</span>
         </div>
         <nav>
@@ -81,10 +81,11 @@
         <p class="section-subtitle">اختر منتجك الذكي واملأ نموذج الطلب بدقة</p>
 
         <div class="products-grid">
+            <!-- بطاقة NFC -->
             <div class="product-card">
                 <div class="product-img-container">
-                    <img src="nfccard.png" alt="بطاقة NFC">
-                    <img src="dess.jpg" alt="Logo" class="watermark-logo">
+                    <img src="nfccard.png" alt="بطاقة NFC" onerror="this.replaceWith(Object.assign(document.createElement('div'), {style:'color:#ff4444;padding:20px;text-align:center;font-size:0.9rem;', innerText:'الصورة nfccard.png غير موجودة'}))">
+                    <img src="dess.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
                 </div>
                 <div class="product-content">
                     <div>
@@ -97,10 +98,11 @@
                 </div>
             </div>
 
+            <!-- درع CNC NFC -->
             <div class="product-card">
                 <div class="product-img-container">
-                    <img src="ccncard.jpg" alt="درع CNC NFC">
-                    <img src="dess.jpg" alt="Logo" class="watermark-logo">
+                    <img src="ccncard.jpg" alt="درع CNC NFC" onerror="this.replaceWith(Object.assign(document.createElement('div'), {style:'color:#ff4444;padding:20px;text-align:center;font-size:0.9rem;', innerText:'الصورة ccncard.jpg غير موجودة'}))">
+                    <img src="dess.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
                 </div>
                 <div class="product-content">
                     <div>
@@ -114,10 +116,11 @@
                 </div>
             </div>
 
+            <!-- درع أكريليك NFC -->
             <div class="product-card">
                 <div class="product-img-container">
-                    <img src="acrelac.jpg" alt="درع أكريليك NFC">
-                    <img src="dess.jpg" alt="Logo" class="watermark-logo">
+                    <img src="acrelac.jpg" alt="درع أكريليك NFC" onerror="this.replaceWith(Object.assign(document.createElement('div'), {style:'color:#ff4444;padding:20px;text-align:center;font-size:0.9rem;', innerText:'الصورة acrelac.jpg غير موجودة'}))">
+                    <img src="dess.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
                 </div>
                 <div class="product-content">
                     <div>
@@ -131,6 +134,7 @@
             </div>
         </div>
 
+        <!-- نموذج الطلب الرسمي -->
         <div class="order-section">
             <h3>نموذج <span>الطلب الرسمي</span></h3>
             <form id="orderForm">
@@ -174,7 +178,6 @@
     </footer>
 
     <script>
-        // إعدادات فايربيس
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_AUTH_DOMAIN",
