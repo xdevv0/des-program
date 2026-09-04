@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>des program | الحلول الرقمية المبتكرة</title>
+    <title>DES PROGRAM | الحلول الرقمية المبتكرة</title>
+    <!-- استدعاء خط Cairo للغة العربية و Montserrat الأنيق والمميز للعناوين الإنجليزية -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -193,7 +194,8 @@
 
     <header>
         <div class="logo-container">
-            <img src="dess.JPG" alt="DES PROGRAM Logo">
+            <!-- كود ذكي يقوم بتجربة الامتدادات تلقائياً لضمان ظهور الشعار مهما كانت صيغته -->
+            <img id="logoImg" src="dess.JPG" alt="DES PROGRAM Logo" onerror="tryNextFormat(this)">
         </div>
         <h1>DES PROGRAM</h1>
         <div class="tagline">CODE • CREATE • SOLVE</div>
@@ -201,6 +203,7 @@
 
     <div class="container">
         
+        <!-- من نحن -->
         <section>
             <h2><i class="fa-solid fa-circle-info"></i> من نحن</h2>
             <p>
@@ -208,10 +211,12 @@
             </p>
         </section>
 
+        <!-- خدماتنا -->
         <section>
             <h2><i class="fa-solid fa-layer-group"></i> خدماتنا الاحترافية</h2>
             
             <div class="services-grid">
+                <!-- الخدمة الأولى -->
                 <div class="service-card">
                     <div class="service-banner">
                         <i class="fa-solid fa-code"></i>
@@ -222,6 +227,7 @@
                     </div>
                 </div>
 
+                <!-- الخدمة الثانية -->
                 <div class="service-card">
                     <div class="service-banner">
                         <i class="fa-solid fa-wifi"></i>
@@ -232,6 +238,7 @@
                     </div>
                 </div>
 
+                <!-- الخدمة الثالثة -->
                 <div class="service-card" style="grid-column: 1 / -1;">
                     <div class="service-banner">
                         <i class="fa-solid fa-microchip"></i>
@@ -244,11 +251,13 @@
             </div>
         </section>
 
+        <!-- التواصـل معنا -->
         <section>
             <h2><i class="fa-solid fa-headset"></i> تواصل معنا</h2>
             <p style="margin-bottom: 15px;">يسعدنا تواصلك معنا لأي استفسار أو طلب خدمة عبر قنواتنا الرسمية:</p>
             
             <div class="contact-links">
+                <!-- زر الواتساب -->
                 <a href="https://wa.me/972566027617" class="link-btn whatsapp" target="_blank">
                     <div class="link-content">
                         <i class="fa-brands fa-whatsapp"></i>
@@ -257,6 +266,7 @@
                     <i class="fa-solid fa-angle-left arrow"></i>
                 </a>
 
+                <!-- زر الانستغرام -->
                 <a href="https://www.instagram.com/des_program?igsh=YXc0emN3bW9qc3M1" class="link-btn instagram" target="_blank">
                     <div class="link-content">
                         <i class="fa-brands fa-instagram"></i>
@@ -272,5 +282,17 @@
         </div>
     </div>
 
+    <script>
+        // دالة تلقائية لتبديل صيغ الصورة في حال لم تكن الصورة بصيغة dess.JPG
+        let formats = ['dess.JPG', 'dess.jpg', 'dess.png', 'dess.PNG', 'logo.jpg', 'logo.JPG', 'logo.png'];
+        let currentFormatIndex = 0;
+        
+        function tryNextFormat(imgElement) {
+            currentFormatIndex++;
+            if (currentFormatIndex < formats.length) {
+                imgElement.src = formats[currentFormatIndex];
+            }
+        }
+    </script>
 </body>
 </html>
