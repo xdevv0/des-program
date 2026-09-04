@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Des Program - منتجاتنا وأسعارنا</title>
+    <title>Des Program - المنتجات ونموذج الطلب الرسمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <style>
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
@@ -17,35 +21,42 @@
         nav ul { display: flex; list-style: none; gap: 20px; }
         nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: 0.3s; }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
-        .products { padding: 130px 5% 80px; max-width: 1300px; margin: 0 auto; }
+        
+        .products-container { padding: 130px 5% 80px; max-width: 1300px; margin: 0 auto; }
         .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 15px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 50px; font-size: 1.1rem; }
+        
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
         .product-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; position: relative; }
         .product-card:hover { transform: translateY(-8px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15); }
-        .product-img-container { width: 100%; height: 260px; overflow: hidden; background: #000; position: relative; }
+        .product-img-container { width: 100%; height: 240px; overflow: hidden; background: #000; position: relative; }
         .product-img-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .watermark-logo { position: absolute; bottom: 10px; left: 10px; height: 30px; opacity: 0.8; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); padding: 2px; }
-        .product-card:hover .product-img-container img { transform: scale(1.05); }
-        .product-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-        .product-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; color: var(--primary-blue); }
-        .price-list { list-style: none; margin-bottom: 20px; }
-        .price-list li { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 8px; display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 6px; }
+        .watermark-logo { position: absolute; bottom: 10px; left: 10px; height: 32px; opacity: 0.85; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.6); padding: 2px; }
+        .product-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+        .product-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; color: var(--primary-blue); }
+        
+        .price-list { list-style: none; margin-bottom: 15px; }
+        .price-list li { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 6px; display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 4px; }
         .price-list li span { color: #fff; font-weight: 700; }
-        .note { font-size: 0.85rem; color: #ff007f; margin-bottom: 20px; background: rgba(255,0,127,0.1); padding: 8px; border-radius: 6px; text-align: center; }
-        .web-service-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; text-align: center; margin-top: 40px; }
-        .web-service-section h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--primary-blue); }
-        .web-service-section p { color: var(--text-muted); margin-bottom: 25px; font-size: 1.1rem; line-height: 1.6; }
-        .social-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .social-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 700; color: #fff; transition: 0.3s; }
-        .whatsapp-btn { background: #25d366; box-shadow: 0 0 15px rgba(37, 211, 102, 0.4); }
-        .whatsapp-btn:hover { background: #20ba5a; transform: translateY(-3px); }
-        .instagram-btn { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #fd1d1d); box-shadow: 0 0 15px rgba(193, 53, 132, 0.4); }
-        .instagram-btn:hover { opacity: 0.9; transform: translateY(-3px); }
-        .product-btn { display: block; text-align: center; background: transparent; border: 1px solid var(--primary-blue); color: var(--primary-blue); padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 700; transition: 0.3s; }
-        .product-btn:hover { background: var(--accent-gradient); border-color: transparent; color: #fff; }
+        .note { font-size: 0.8rem; color: #ff007f; margin-bottom: 15px; background: rgba(255,0,127,0.1); padding: 6px; border-radius: 6px; text-align: center; }
+
+        /* نموذج الطلب الرسمي */
+        .order-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; max-width: 800px; margin: 0 auto; }
+        .order-section h3 { font-size: 1.8rem; text-align: center; margin-bottom: 25px; color: #fff; }
+        .order-section h3 span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group.full-width { grid-column: span 2; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 500; font-size: 0.95rem; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+        .submit-order-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 14px; border: none; border-radius: 8px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); }
+        .submit-order-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
         footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; margin-top: 50px; }
+        @media(max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .form-group.full-width { grid-column: span 1; } }
     </style>
 </head>
 <body>
@@ -57,7 +68,7 @@
         <nav>
             <ul>
                 <li><a href="des.html">الرئيسية</a></li>
-                <li><a href="products.html" class="active">منتجاتنا</a></li>
+                <li><a href="products.html" class="active">المنتجات والطلب</a></li>
                 <li><a href="services.html">خدماتنا</a></li>
                 <li><a href="about.html">من نحن</a></li>
                 <li><a href="contact.html">تواصل معنا</a></li>
@@ -65,12 +76,11 @@
         </nav>
     </header>
 
-    <section class="products">
-        <h2 class="section-title">منتجاتنا <span>والأسعار المعتمدة</span></h2>
-        <p class="section-subtitle">اختر المنتج المناسب لك ولنشاطك التجاري</p>
+    <div class="products-container">
+        <h2 class="section-title">قائمة المنتجات <span>والأسعار الرسمية</span></h2>
+        <p class="section-subtitle">اختر منتجك الذكي واملأ نموذج الطلب بدقة</p>
 
         <div class="products-grid">
-            <!-- بطاقة NFC -->
             <div class="product-card">
                 <div class="product-img-container">
                     <img src="nfccard.png" alt="بطاقة NFC">
@@ -80,15 +90,13 @@
                     <div>
                         <h3 class="product-title">بطاقة NFC الذكية</h3>
                         <ul class="price-list">
-                            <li>إذا الموقع من الزبون: <span>50 شيكل</span></li>
-                            <li>شامل البرمجة وربط NFC: <span>100 شيكل</span></li>
+                            <li>موقع الويب من الزبون: <span>50 شيكل</span></li>
+                            <li>شامل البرمجة وربط NFC (من طرفنا): <span>100 شيكل</span></li>
                         </ul>
                     </div>
-                    <a href="https://wa.me/رقمك_هنا" target="_blank" class="product-btn">اطلب المنتج الآن</a>
                 </div>
             </div>
 
-            <!-- درع CNC NFC -->
             <div class="product-card">
                 <div class="product-img-container">
                     <img src="ccncard.jpg" alt="درع CNC NFC">
@@ -98,16 +106,14 @@
                     <div>
                         <h3 class="product-title">درع CNC بتقنية NFC</h3>
                         <ul class="price-list">
-                            <li>إذا الموقع من الزبون: <span>80 شيكل</span></li>
-                            <li>شامل البرمجة وربط NFC: <span>140 شيكل</span></li>
+                            <li>موقع الويب من الزبون: <span>80 شيكل</span></li>
+                            <li>شامل البرمجة وربط NFC (من طرفنا): <span>140 شيكل</span></li>
                         </ul>
-                        <div class="note">ملاحظة: للكميات السعر يختلف (خاص لأصحاب المصالح)</div>
+                        <div class="note">ملاحظة رسمية: للكميات السعر يختلف (خاص لأصحاب المصالح)</div>
                     </div>
-                    <a href="https://wa.me/رقمك_هنا" target="_blank" class="product-btn">اطلب المنتج الآن</a>
                 </div>
             </div>
 
-            <!-- درع أكريليك NFC -->
             <div class="product-card">
                 <div class="product-img-container">
                     <img src="acrelac.jpg" alt="درع أكريليك NFC">
@@ -117,33 +123,89 @@
                     <div>
                         <h3 class="product-title">درع أكريليك NFC</h3>
                         <ul class="price-list">
-                            <li>إذا الموقع من الزبون: <span>100 شيكل</span></li>
-                            <li>شامل البرمجة وربط NFC: <span>160 شيكل</span></li>
+                            <li>موقع الويب من الزبون: <span>100 شيكل</span></li>
+                            <li>شامل البرمجة وربط NFC (من طرفنا): <span>160 شيكل</span></li>
                         </ul>
                     </div>
-                    <a href="https://wa.me/رقمك_هنا" target="_blank" class="product-btn">اطلب المنتج الآن</a>
                 </div>
             </div>
         </div>
 
-        <!-- قسم برمجة وتصميم مواقع الويب -->
-        <div class="web-service-section">
-            <h3>خدمة برمجة وتصميم مواقع الويب</h3>
-            <p>نصمم ونبرمع مواقع إلكترونية احترافية مخصصة بالكامل حسب طلب الزبون وحاجته لتناسب نشاطك التجاري بدقة عالية.</p>
-            <p style="color: #fff; font-weight: 700; margin-bottom: 20px;">لتفاصيل أكثر والطلب، تواصل معنا مباشرة عبر:</p>
-            <div class="social-buttons">
-                <a href="https://wa.me/رقمك_هنا" target="_blank" class="social-btn whatsapp-btn">
-                    <i class="fa-brands fa-whatsapp fa-lg"></i> واتساب
-                </a>
-                <a href="https://instagram.com/اسم_حسابك" target="_blank" class="social-btn instagram-btn">
-                    <i class="fa-brands fa-instagram fa-lg"></i> انستغرام
-                </a>
-            </div>
+        <div class="order-section">
+            <h3>نموذج <span>الطلب الرسمي</span></h3>
+            <form id="orderForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>الاسم الكريم *</label>
+                        <input type="text" id="clientName" required placeholder="أدخل اسمك الكامل">
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الهاتف *</label>
+                        <input type="tel" id="clientPhone" required placeholder="05xxxxxxxx">
+                    </div>
+                    <div class="form-group">
+                        <label>العنوان التفصيلي *</label>
+                        <input type="text" id="clientAddress" required placeholder="الشارع، اسم المبنى، رقم الطابق">
+                    </div>
+                    <div class="form-group">
+                        <label>المدينة | المنطقة *</label>
+                        <input type="text" id="clientCity" required placeholder="مثال: رام الله / نابلس">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>المنتج والمواصفات المختارة *</label>
+                        <select id="productChoice" required>
+                            <option value="" disabled selected>-- اختر المنتج ونوع الخدمة --</option>
+                            <option value="بطاقة NFC - موقع من الزبون (50 شيكل)">بطاقة NFC - موقع الويب من الزبون (50 شيكل)</option>
+                            <option value="بطاقة NFC - برمجة من طرفنا (100 شيكل)">بطاقة NFC - برمجة وربط من طرفنا (100 شيكل)</option>
+                            <option value="درع CNC NFC - موقع من الزبون (80 شيكل)">درع CNC NFC - موقع الويب من الزبون (80 شيكل)</option>
+                            <option value="درع CNC NFC - برمجة من طرفنا (140 شيكل)">درع CNC NFC - برمجة وربط من طرفنا (140 شيكل)</option>
+                            <option value="درع أكريليك NFC - موقع من الزبون (100 شيكل)">درع أكريليك NFC - موقع الويب من الزبون (100 شيكل)</option>
+                            <option value="درع أكريليك NFC - برمجة من طرفنا (160 شيكل)">درع أكريليك NFC - برمجة وربط من طرفنا (160 شيكل)</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="submit-order-btn">إرسال الطلب رسمياً</button>
+            </form>
         </div>
-    </section>
+    </div>
 
     <footer>
         <p>جميع الحقوق محفوظة &copy; 2026 Des Program | Code • Create • Solve</p>
     </footer>
+
+    <script>
+        // إعدادات فايربيس
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const orderForm = document.getElementById('orderForm');
+        orderForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            db.collection("orders").add({
+                clientName: document.getElementById('clientName').value,
+                clientPhone: document.getElementById('clientPhone').value,
+                clientAddress: document.getElementById('clientAddress').value,
+                clientCity: document.getElementById('clientCity').value,
+                selectedProduct: document.getElementById('productChoice').value,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                alert("تم إرسال طلبك بنجاح وبشكل رسمي! سنتواصل معك في أقرب وقت.");
+                orderForm.reset();
+            })
+            .catch((error) => {
+                console.error("خطأ:", error);
+                alert("حدث خطأ أثناء إرسال الطلب، يرجى المحاولة مجدداً.");
+            });
+        });
+    </script>
 </body>
 </html>
