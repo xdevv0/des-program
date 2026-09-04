@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Des Program - من نحن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); }
+        header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(5, 5, 8, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; z-index: 1000; }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
+        .logo-container img { height: 45px; object-fit: contain; border-radius: 6px; }
+        .logo-text { font-size: 1.2rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav ul { display: flex; list-style: none; gap: 20px; }
+        nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: 0.3s; }
+        nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        .about { padding: 130px 5% 80px; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 2.5rem; margin-bottom: 30px; font-weight: 900; }
+        .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .about-content { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; line-height: 1.8; color: var(--text-muted); font-size: 1.1rem; }
+        .about-content p { margin-bottom: 20px; }
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; position: fixed; bottom: 0; width: 100%; background: var(--bg-color); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="dess.jpg" alt="Des Program Logo">
+            <span class="logo-text">Des Program</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="des.html">الرئيسية</a></li>
+                <li><a href="products.html">منتجاتنا</a></li>
+                <li><a href="services.html">خدماتنا</a></li>
+                <li><a href="about.html" class="active">من نحن</a></li>
+                <li><a href="contact.html">تواصل معنا</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="about">
+        <h2 class="section-title">من نحن في <span>Des Program</span></h2>
+        <div class="about-content">
+            <p>نحن فريق شغوف بالتقنية والابتكار، نجمع بين الإبداع البصري والهندسة البرمجية المتقدمة تحت شعارنا الأساسي: <strong>Code • Create • Solve</strong>.</p>
+            <p>نختص بتقديم حلول رقمية ذكية تدمج العالم الواقعي بالرقمي من خلال تقنيات الـ NFC المبتكرة والدروع المكتبية المصممة بعناية فائقة لتليق بتميز عملك.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 Des Program | Code • Create • Solve</p>
+    </footer>
+</body>
+</html>
