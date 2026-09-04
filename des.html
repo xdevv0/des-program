@@ -194,8 +194,8 @@
 
     <header>
         <div class="logo-container">
-            <!-- كود ذكي يقوم بتجربة الامتدادات تلقائياً لضمان ظهور الشعار مهما كانت صيغته -->
-            <img id="logoImg" src="dess.JPG" alt="DES PROGRAM Logo" onerror="tryNextFormat(this)">
+            <!-- ربط الشعار بدقة مع الامتداد jpg والحروف الصغيرة dess.jpg -->
+            <img src="dess.jpg" alt="DES PROGRAM Logo">
         </div>
         <h1>DES PROGRAM</h1>
         <div class="tagline">CODE • CREATE • SOLVE</div>
@@ -251,7 +251,7 @@
             </div>
         </section>
 
-        <!-- التواصـل معنا -->
+        <!-- تواصل معنا -->
         <section>
             <h2><i class="fa-solid fa-headset"></i> تواصل معنا</h2>
             <p style="margin-bottom: 15px;">يسعدنا تواصلك معنا لأي استفسار أو طلب خدمة عبر قنواتنا الرسمية:</p>
@@ -282,17 +282,5 @@
         </div>
     </div>
 
-    <script>
-        // دالة تلقائية لتبديل صيغ الصورة في حال لم تكن الصورة بصيغة dess.JPG
-        let formats = ['dess.JPG', 'dess.jpg', 'dess.png', 'dess.PNG', 'logo.jpg', 'logo.JPG', 'logo.png'];
-        let currentFormatIndex = 0;
-        
-        function tryNextFormat(imgElement) {
-            currentFormatIndex++;
-            if (currentFormatIndex < formats.length) {
-                imgElement.src = formats[currentFormatIndex];
-            }
-        }
-    </script>
 </body>
 </html>
