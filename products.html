@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- مكتبة Firebase v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
@@ -31,7 +30,7 @@
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
         .product-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; position: relative; }
         .product-card:hover { transform: translateY(-8px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15); }
-        .product-img-container { width: 100%; height: 240px; overflow: hidden; background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
+        .product-img-container { width: 100%; height: 240px; overflow: hidden; background: #000; position: relative; }
         .product-img-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .watermark-logo { position: absolute; bottom: 10px; left: 10px; height: 32px !important; width: auto !important; opacity: 0.85; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.6); padding: 2px; }
         .product-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
@@ -62,7 +61,7 @@
 <body>
     <header>
         <div class="logo-container">
-            <img src="dess.jpg" alt="Des Program Logo" onerror="this.style.display='none'">
+            <img src="descard.jpg" alt="Des Program Logo">
             <span class="logo-text">Des Program</span>
         </div>
         <nav>
@@ -81,11 +80,10 @@
         <p class="section-subtitle">اختر منتجك الذكي واملأ نموذج الطلب بدقة</p>
 
         <div class="products-grid">
-            <!-- بطاقة NFC -->
             <div class="product-card">
                 <div class="product-img-container">
-                    <img src="nfccard.png" alt="بطاقة NFC" onerror="this.replaceWith(Object.assign(document.createElement('div'), {style:'color:#ff4444;padding:20px;text-align:center;font-size:0.9rem;', innerText:'الصورة nfccard.png غير موجودة'}))">
-                    <img src="dess.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
+                    <img src="nfccard.png" alt="بطاقة NFC">
+                    <img src="descard.jpg" alt="Logo" class="watermark-logo">
                 </div>
                 <div class="product-content">
                     <div>
@@ -98,11 +96,10 @@
                 </div>
             </div>
 
-            <!-- درع CNC NFC -->
             <div class="product-card">
                 <div class="product-img-container">
-                    <img src="ccncard.jpg" alt="درع CNC NFC" onerror="this.replaceWith(Object.assign(document.createElement('div'), {style:'color:#ff4444;padding:20px;text-align:center;font-size:0.9rem;', innerText:'الصورة ccncard.jpg غير موجودة'}))">
-                    <img src="dess.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
+                    <img src="ccncard.jpg" alt="درع CNC NFC">
+                    <img src="descard.jpg" alt="Logo" class="watermark-logo">
                 </div>
                 <div class="product-content">
                     <div>
@@ -116,11 +113,10 @@
                 </div>
             </div>
 
-            <!-- درع أكريليك NFC -->
             <div class="product-card">
                 <div class="product-img-container">
-                    <img src="acrelac.jpg" alt="درع أكريليك NFC" onerror="this.replaceWith(Object.assign(document.createElement('div'), {style:'color:#ff4444;padding:20px;text-align:center;font-size:0.9rem;', innerText:'الصورة acrelac.jpg غير موجودة'}))">
-                    <img src="dess.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
+                    <img src="acrelac.jpg" alt="درع أكريليك NFC">
+                    <img src="descard.jpg" alt="Logo" class="watermark-logo">
                 </div>
                 <div class="product-content">
                     <div>
@@ -134,13 +130,12 @@
             </div>
         </div>
 
-        <!-- نموذج الطلب الرسمي -->
         <div class="order-section">
             <h3>نموذج <span>الطلب الرسمي</span></h3>
             <form id="orderForm">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>الاسم  *</label>
+                        <label>الاسم الكريم *</label>
                         <input type="text" id="clientName" required placeholder="أدخل اسمك الكامل">
                     </div>
                     <div class="form-group">
@@ -178,13 +173,14 @@
     </footer>
 
     <script>
+        // ربط مشروعك الفعلي على Firebase
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDummyKeyForDesProgram...",
+            authDomain: "desprogram-89c6a.firebaseapp.com",
+            projectId: "desprogram-89c6a",
+            storageBucket: "desprogram-89c6a.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:1234:web:1234"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
