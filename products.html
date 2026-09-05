@@ -18,51 +18,34 @@
         
         header { 
             position: fixed; top: 0; left: 0; width: 100%; 
-            background: rgba(5, 5, 8, 0.9); backdrop-filter: blur(12px); 
+            background: rgba(5, 5, 8, 0.95); backdrop-filter: blur(12px); 
             border-bottom: 1px solid var(--border-color); 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 12px 5%; z-index: 1000; transition: background-color 0.3s ease; 
+            padding: 12px 4%; z-index: 1000; transition: background-color 0.3s ease; 
         }
         header.scrolled { background: rgba(5, 5, 8, 0.98); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
         
         .logo-container { display: flex; align-items: center; gap: 8px; text-decoration: none; }
         .logo-container img { height: 32px; object-fit: contain; border-radius: 6px; }
-        .logo-text { font-size: 1rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
+        .logo-text { font-size: 0.95rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        /* زر القائمة الجانبية (3 شحطات) */
-        .hamburger-btn { background: none; border: none; color: var(--text-color); font-size: 1.5rem; cursor: pointer; transition: 0.3s; z-index: 1001; }
-        .hamburger-btn:hover { color: var(--primary-blue); }
-
-        /* القائمة الجانبية (Sidebar) */
-        .side-menu {
-            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
-            background: var(--card-bg); border-left: 1px solid var(--border-color);
-            box-shadow: -10px 0 30px rgba(0,0,0,0.7); z-index: 2500;
-            transition: right 0.4s ease-in-out; display: flex; flex-direction: column; padding: 20px;
+        /* روابط الشريط العلوي */
+        nav ul { display: flex; list-style: none; gap: 15px; align-items: center; flex-wrap: wrap; }
+        nav ul li a { 
+            color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.85rem; 
+            transition: 0.3s; white-space: nowrap; display: flex; align-items: center; gap: 5px; 
         }
-        .side-menu.open { right: 0; }
-        .side-menu-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
-        .close-side-btn { background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; transition: 0.3s; }
-        .close-side-btn:hover { color: #ff007f; }
+        nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        nav ul li a.account-link { color: var(--primary-blue); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; background: rgba(0, 210, 255, 0.05); }
+        nav ul li a.account-link:hover { background: rgba(0, 210, 255, 0.15); }
 
-        .side-menu-links { list-style: none; display: flex; flex-direction: column; gap: 15px; }
-        .side-menu-links li a {
-            display: flex; align-items: center; gap: 12px; color: var(--text-color);
-            text-decoration: none; font-size: 1.05rem; font-weight: 500; padding: 10px 12px;
-            border-radius: 8px; transition: 0.3s; background: rgba(255,255,255,0.02);
-        }
-        .side-menu-links li a:hover, .side-menu-links li a.active {
-            background: rgba(0, 210, 255, 0.1); color: var(--primary-blue); transform: translateX(-5px);
+        @media(max-width: 900px) {
+            header { flex-direction: column; gap: 10px; padding: 10px 2%; }
+            nav ul { justify-content: center; gap: 10px; }
+            nav ul li a { font-size: 0.75rem; }
         }
 
-        .menu-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000;
-            display: none; opacity: 0; transition: opacity 0.3s ease;
-        }
-        .menu-overlay.active { display: block; opacity: 1; }
-
-        .products-container { padding: 130px 5% 80px; max-width: 1300px; margin: 0 auto; }
+        .products-container { padding: 140px 5% 80px; max-width: 1300px; margin: 0 auto; }
         .section-title { text-align: center; font-size: 2.3rem; margin-bottom: 10px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 1.05rem; }
@@ -134,30 +117,18 @@
             <span class="logo-text">Des Program</span>
         </a>
         
-        <!-- زر الـ 3 شحطات للقائمة الجانبية -->
-        <button class="hamburger-btn" onclick="toggleSideMenu()" title="القائمة الرئيسية">
-            <i class="fa-solid fa-bars"></i>
-        </button>
+        <!-- الشريط العلوي الموحد لجميع الأقسام ورابط حسابي -->
+        <nav>
+            <ul>
+                <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
+                <li><a href="products.html" class="active"><i class="fa-solid fa-box-open"></i> المنتجات والطلب</a></li>
+                <li><a href="services.html"><i class="fa-solid fa-layer-group"></i> خدماتنا</a></li>
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
+                <li><a href="contact.html"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
+                <li><a href="account.html" class="account-link"><i class="fa-solid fa-user-gear"></i> حسابي</a></li>
+            </ul>
+        </nav>
     </header>
-
-    <!-- طبقة التعتيم الخلفية -->
-    <div class="menu-overlay" id="menuOverlay" onclick="toggleSideMenu()"></div>
-
-    <!-- القائمة الجانبية (Sidebar) الموحدة بكافة الأقسام -->
-    <div class="side-menu" id="sideMenu">
-        <div class="side-menu-header">
-            <span class="logo-text" style="font-size: 1.1rem;">أقسام الموقع</span>
-            <button class="close-side-btn" onclick="toggleSideMenu()"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <ul class="side-menu-links">
-            <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
-            <li><a href="products.html" class="active"><i class="fa-solid fa-box-open"></i> المنتجات والطلب</a></li>
-            <li><a href="services.html"><i class="fa-solid fa-layer-group"></i> خدماتنا</a></li>
-            <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
-            <li><a href="contact.html"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
-            <li><a href="account.html"><i class="fa-solid fa-user-gear"></i> حسابي (لوحة التحكم)</a></li>
-        </ul>
-    </div>
 
     <!-- قسم المنتجات -->
     <div class="products-container" id="productsSection">
@@ -333,14 +304,6 @@
     </footer>
 
     <script>
-        // دالة فتح وإغلاق القائمة الجانبية
-        function toggleSideMenu() {
-            const sideMenu = document.getElementById('sideMenu');
-            const menuOverlay = document.getElementById('menuOverlay');
-            sideMenu.classList.toggle('open');
-            menuOverlay.classList.toggle('active');
-        }
-
         window.addEventListener('scroll', function() {
             const header = document.getElementById('mainHeader');
             if (window.pageYOffset > 50) {
