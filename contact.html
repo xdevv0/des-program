@@ -9,8 +9,8 @@
     
     <style>
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
         
         header { 
             position: fixed; 
@@ -23,38 +23,112 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 10px 4%; 
+            padding: 12px 5%; 
             z-index: 1000; 
-            transition: transform 0.3s ease, background-color 0.3s ease; 
-            animation: headerMove 6s ease-in-out infinite alternate;
-            flex-wrap: wrap;
-            gap: 10px;
+            transition: background-color 0.3s ease; 
         }
         header.scrolled { background: rgba(5, 5, 8, 0.98); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
 
-        @keyframes headerMove {
-            0% { transform: translateX(0); }
-            50% { transform: translateX(6px); }
-            100% { transform: translateX(-6px); }
-        }
-        
-        .logo-container { display: flex; align-items: center; gap: 8px; }
+        .logo-container { display: flex; align-items: center; gap: 8px; text-decoration: none; }
         .logo-container img { height: 32px; max-width: 100%; object-fit: contain; border-radius: 6px; }
-        .logo-text { font-size: 0.95rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
+        .logo-text { font-size: 1rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        nav ul { display: flex; list-style: none; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
-        nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.75rem; transition: 0.3s; white-space: nowrap; }
-        nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
-        
-        @media(max-width: 768px) {
-            header { justify-content: center; padding: 8px 2%; }
-            nav ul { gap: 8px; }
-            nav ul li a { font-size: 0.7rem; }
+        /* زر الـ 3 شحطات الجانبي */
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+        .hamburger-btn:hover { color: var(--primary-blue); }
+
+        /* القائمة الجانبية (Sidebar) */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.7);
+            z-index: 2500;
+            transition: right 0.4s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
         }
 
-        .contact { padding: 130px 5% 80px; max-width: 700px; margin: 0 auto; }
+        .side-menu.open { right: 0; }
+
+        .side-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .close-side-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-side-btn:hover { color: #ff007f; }
+
+        .side-menu-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .side-menu-links li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 500;
+            padding: 10px 12px;
+            border-radius: 8px;
+            transition: 0.3s;
+            background: rgba(255,255,255,0.02);
+        }
+        .side-menu-links li a:hover, .side-menu-links li a.active {
+            background: rgba(0, 210, 255, 0.1);
+            color: var(--primary-blue);
+            transform: translateX(-5px);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .menu-overlay.active { display: block; opacity: 1; }
+
+        .contact { padding: 130px 5% 60px; max-width: 700px; margin: 0 auto; width: 100%; flex-grow: 1; }
         .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 30px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         .contact-content { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; text-align: center; }
         .contact-content p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px; line-height: 1.6; }
         .social-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
@@ -64,29 +138,44 @@
         .instagram-btn { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #fd1d1d); box-shadow: 0 0 15px rgba(193, 53, 132, 0.4); }
         .instagram-btn:hover { opacity: 0.9; transform: translateY(-3px); }
         
-        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; position: fixed; bottom: 0; width: 100%; background: var(--bg-color); }
-        @media(max-width: 768px) { footer { position: relative; margin-top: 50px; } }
+        footer { text-align: center; padding: 25px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; background: var(--bg-color); }
     </style>
 </head>
 <body>
+
     <header id="mainHeader">
-        <div class="logo-container">
+        <a href="index.html" class="logo-container">
             <img src="dess.jpg" alt="Des Program Logo" onerror="this.style.display='none'">
             <span class="logo-text">Des Program</span>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">الرئيسية</a></li>
-                <li><a href="products.html">المنتجات والطلب</a></li>
-                <li><a href="services.html">خدماتنا</a></li>
-                <li><a href="about.html">من نحن</a></li>
-                <li><a href="contact.html" class="active">تواصل معنا</a></li>
-            </ul>
-        </nav>
+        </a>
+        
+        <!-- زر الـ 3 شحطات الجانبي -->
+        <button class="hamburger-btn" onclick="toggleSideMenu()" title="قائمة الأقسام">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </header>
 
+    <!-- طبقة التعتيم الخلفية -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleSideMenu()"></div>
+
+    <!-- القائمة الجانبية التي تضم كافة أقسام الموقع -->
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <span class="logo-text" style="font-size: 1.1rem;">أقسام الموقع</span>
+            <button class="close-side-btn" onclick="toggleSideMenu()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="side-menu-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
+            <li><a href="products.html"><i class="fa-solid fa-box-open"></i> المنتجات والطلب</a></li>
+            <li><a href="services.html"><i class="fa-solid fa-layer-group"></i> خدماتنا</a></li>
+            <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
+            <li><a href="contact.html" class="active"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
+            <li><a href="account.html"><i class="fa-solid fa-user-gear"></i> حسابي (لوحة التحكم)</a></li>
+        </ul>
+    </div>
+
     <section class="contact">
-        <h2 class="section-title">تواصل <span>معنا </span></h2>
+        <h2 class="section-title">تواصل <span>معنا</span></h2>
         <div class="contact-content">
             <p>للاستفسارات الخاصة والطلبات المخصصة لخدمات برمجة وتصميم مواقع الويب والدروع الذكية، يسعدنا تواصلكم معنا مباشرة:</p>
             <div class="social-buttons">
@@ -105,6 +194,13 @@
     </footer>
 
     <script>
+        function toggleSideMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            sideMenu.classList.toggle('open');
+            menuOverlay.classList.toggle('active');
+        }
+
         const header = document.getElementById('mainHeader');
         window.addEventListener('scroll', function() {
             if (window.pageYOffset > 50) {
