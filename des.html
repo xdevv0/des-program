@@ -10,18 +10,43 @@
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
         body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
-        header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(5, 5, 8, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; z-index: 1000; }
+        
+        header { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            background: rgba(5, 5, 8, 0.85); 
+            backdrop-filter: blur(10px); 
+            border-bottom: 1px solid var(--border-color); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 5%; 
+            z-index: 1000; 
+            animation: headerMove 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes headerMove {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(12px); }
+            100% { transform: translateX(-12px); }
+        }
+
         .logo-container { display: flex; align-items: center; gap: 12px; }
         .logo-container img { height: 45px; object-fit: contain; border-radius: 6px; }
         .logo-text { font-size: 1.2rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         nav ul { display: flex; list-style: none; gap: 20px; }
         nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: 0.3s; }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; background: radial-gradient(circle at center, #121025 0%, var(--bg-color) 70%); }
         .hero h1 { font-size: 3.2rem; font-weight: 900; margin-bottom: 15px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 650px; margin-bottom: 30px; line-height: 1.6; }
         .btn { background: var(--accent-gradient); color: #fff; padding: 12px 35px; border-radius: 30px; text-decoration: none; font-weight: 700; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); transition: 0.3s; }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0, 210, 255, 0.7); }
+        
         footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; }
     </style>
 </head>
