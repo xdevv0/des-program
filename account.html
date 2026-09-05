@@ -29,7 +29,6 @@
         .logo-container img { height: 32px; object-fit: contain; border-radius: 6px; }
         .logo-text { font-size: 0.95rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        /* روابط الشريط العلوي الموحد */
         nav ul { display: flex; list-style: none; gap: 15px; align-items: center; flex-wrap: wrap; }
         nav ul li a { 
             color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.85rem; 
@@ -45,31 +44,61 @@
             nav ul li a { font-size: 0.75rem; }
         }
 
-        .main-content { padding: 150px 5% 60px; max-width: 900px; margin: 0 auto; width: 100%; flex-grow: 1; }
+        .main-content { padding: 130px 5% 60px; max-width: 900px; margin: 0 auto; width: 100%; flex-grow: 1; }
         
-        /* واجهة تسجيل الدخول */
-        .auth-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; text-align: center; max-width: 450px; margin: 40px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .auth-card h2 { font-size: 1.8rem; margin-bottom: 15px; color: #fff; }
-        .auth-card h2 span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .auth-card p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; }
-        .form-group { margin-bottom: 20px; text-align: right; }
-        .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.9rem; }
-        .form-group input { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; }
-        .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.3); }
-        
-        .action-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(157, 78, 221, 0.4); }
-        .action-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        /* نموذج تسجيل الدخول المتقدم المطابق للموقع */
+        .auth-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 35px; max-width: 480px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        .logo-area { text-align: center; margin-bottom: 20px; }
+        .logo-area h2 { font-size: 1.8rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+        .logo-area p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
 
-        /* لوحة التحكم */
+        .form-group { margin-bottom: 16px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 500; font-size: 0.85rem; }
+        .form-group input { width: 100%; padding: 11px 14px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+
+        .phone-input-wrapper { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: 0.3s; direction: ltr; }
+        .phone-input-wrapper:focus-within { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+        .phone-prefix { background: rgba(255, 255, 255, 0.05); color: var(--primary-blue); padding: 11px 14px; font-weight: 700; font-size: 0.95rem; border-right: 1px solid var(--border-color); user-select: none; }
+        .phone-input-wrapper input { border: none !important; background: transparent !important; box-shadow: none !important; padding: 11px 14px; color: #fff; font-size: 0.95rem; outline: none; width: 100%; }
+
+        .password-wrapper { position: relative; }
+        .toggle-password { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; transition: 0.3s; z-index: 10; }
+        .toggle-password:hover { color: var(--primary-blue); }
+
+        .strength-meter { height: 4px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 6px; overflow: hidden; display: flex; }
+        .strength-fill { height: 100%; width: 0%; transition: 0.3s; }
+        .strength-text { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; display: block; text-align: left; }
+
+        .remember-row { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
+        .remember-row input { accent-color: var(--primary-blue); width: 16px; height: 16px; cursor: pointer; }
+
+        .btn-submit { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 5px; box-shadow: 0 0 15px rgba(157, 78, 221, 0.4); }
+        .btn-submit:hover { opacity: 0.9; transform: translateY(-2px); }
+        
+        .otp-section { display: none; margin-top: 15px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .otp-inputs-container { display: flex; justify-content: space-between; gap: 10px; direction: ltr; margin-bottom: 15px; }
+        .otp-box { width: 55px; height: 55px; text-align: center; font-size: 1.4rem; font-weight: bold; background: rgba(0,0,0,0.6); border: 1px solid var(--border-color); border-radius: 10px; color: #fff; outline: none; transition: 0.3s; }
+        .otp-box:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.3); }
+
+        .error-msg { color: #ff007f; font-size: 0.8rem; margin-top: 4px; display: block; text-align: right; }
+        
+        .resend-area { text-align: center; margin-top: 12px; font-size: 0.85rem; color: var(--text-muted); }
+        .resend-btn { background: none; border: none; color: var(--primary-blue); cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; text-decoration: underline; padding: 0; }
+        .resend-btn:disabled { color: var(--text-muted); cursor: not-allowed; text-decoration: none; }
+
+        /* لوحة التحكم والبيانات الحقيقية */
         .dashboard-section { display: none; }
-        .section-title { font-size: 2.2rem; font-weight: 900; margin-bottom: 10px; text-align: center; }
+        .section-title { font-size: 2.2rem; font-weight: 900; margin-bottom: 5px; text-align: center; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; }
+        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; }
 
-        .dash-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; margin-bottom: 25px; }
-        .dash-card h3 { color: var(--primary-blue); margin-bottom: 15px; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+        .dash-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
+        .dash-card h3 { color: var(--primary-blue); margin-bottom: 18px; font-size: 1.25rem; display: flex; align-items: center; gap: 10px; }
         
-        .info-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; font-size: 0.95rem; }
+        .info-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px; font-size: 0.95rem; }
         .info-row span { color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
         .info-row strong { color: #fff; text-align: left; }
 
@@ -90,7 +119,6 @@
             <span class="logo-text">Des Program</span>
         </a>
         
-        <!-- الشريط العلوي الموحد يغنيك عن القائمة الجانبية -->
         <nav>
             <ul>
                 <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
@@ -104,27 +132,69 @@
     </header>
 
     <div class="main-content">
-        <!-- قسم تسجيل الدخول -->
+        <!-- قسم نموذج تسجيل الدخول الإلزامي المتقدم -->
         <div id="loginSection" class="auth-card" style="display: none;">
-            <h2>تسجيل دخول <span>العملاء</span></h2>
-            <p>أدخل اسمك ورقم هاتفك للوصول الفوري إلى بياناتك المعتمدة ومتابعة طلباتك.</p>
+            <div class="logo-area">
+                <h2>Des Program</h2>
+                <p>تسجيل الدخول برقم فلسطيني (+970) للوصول للوحة حسابك</p>
+            </div>
+
             <form id="loginForm">
                 <div class="form-group">
                     <label>الاسم الكامل</label>
-                    <input type="text" id="loginName" required placeholder="مثال: أحمد محمد">
+                    <input type="text" id="userName" required placeholder="أدخل اسمك كاملاً" style="text-align: right; direction: rtl;">
                 </div>
+
                 <div class="form-group">
-                    <label>رقم الهاتف الشخصي</label>
-                    <input type="tel" id="loginPhone" required placeholder="05xxxxxxxx">
+                    <label>رقم الجوال (فلسطيني)</label>
+                    <div class="phone-input-wrapper">
+                        <input type="tel" id="phoneInput" required maxlength="9" placeholder="59xxxxxxx أو 56xxxxxxx">
+                        <span class="phone-prefix">+970</span>
+                    </div>
+                    <span id="phoneError" class="error-msg" style="display:none;">يجب أن يتكون الرقم المدخل من 9 خانات صحيحة!</span>
                 </div>
-                <button type="submit" class="action-btn">دخول إلى حسابي</button>
+
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="passwordInput" required placeholder="••••••••" style="text-align: right; direction: rtl; padding-left: 40px;">
+                        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                    <div class="strength-meter"><div class="strength-fill" id="strengthFill"></div></div>
+                    <span class="strength-text" id="strengthText">قوة كلمة المرور</span>
+                </div>
+
+                <label class="remember-row">
+                    <input type="checkbox" id="rememberMe"> تذكرني على هذا الجهاز
+                </label>
+
+                <button type="button" id="sendOtpBtn" class="btn-submit">إرسال كود التحقق (OTP)</button>
+
+                <!-- قسم إدخال كود التحقق بالمربعات المنفصلة -->
+                <div id="otpBox" class="otp-section">
+                    <div class="form-group">
+                        <label style="color: var(--primary-blue); text-align: right; margin-bottom: 8px;">أدخل كود التحقق المكون من 4 أرقام</label>
+                        <div class="otp-inputs-container">
+                            <input type="text" class="otp-box" maxlength="1" data-index="1">
+                            <input type="text" class="otp-box" maxlength="1" data-index="2">
+                            <input type="text" class="otp-box" maxlength="1" data-index="3">
+                            <input type="text" class="otp-box" maxlength="1" data-index="4">
+                        </div>
+                        <span id="otpErrorMsg" class="error-msg" style="display:none;"></span>
+                    </div>
+                    <button type="submit" id="verifyBtn" class="btn-submit">تأكيد الدخول وعرض البيانات</button>
+                    
+                    <div class="resend-area">
+                        <span id="timerText"><button type="button" id="resendBtn" class="resend-btn" disabled>إعادة الإرسال (60)</button></span>
+                    </div>
+                </div>
             </form>
         </div>
 
-        <!-- قسم لوحة التحكم مع تفاصيل المستخدم الحقيقية -->
+        <!-- لوحة التحكم وعرض البيانات الحقيقية -->
         <div id="dashboardSection" class="dashboard-section">
             <h2 class="section-title">لوحة تحكم <span>الحساب الشخصي</span></h2>
-            <p class="section-subtitle">أهلاً بك مجدداً، يمكنك من هنا رؤية بياناتك المسجلة ومتابعة كافة طلباتك</p>
+            <p class="section-subtitle">أهلاً بك مجدداً، يتم عرض بياناتك الحقيقية وسجل طلباتك المرتبطة مباشرةً من قاعدة البيانات</p>
 
             <!-- بطاقة معلومات العميل الحقيقية -->
             <div class="dash-card">
@@ -137,7 +207,7 @@
                 
                 <div class="info-row">
                     <span><i class="fa-solid fa-phone"></i> رقم الهاتف المعتمد:</span>
-                    <strong id="displayUserPhone">جاري التحميل...</strong>
+                    <strong id="displayUserPhone" style="direction: ltr;">جاري التحميل...</strong>
                 </div>
 
                 <div class="info-row">
@@ -158,7 +228,7 @@
                 <button class="logout-btn" onclick="logoutUser()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
             </div>
 
-            <!-- بطاقة متابعة الطلبات -->
+            <!-- بطاقة متابعة الطلبات الحقيقية -->
             <div class="dash-card">
                 <h3><i class="fa-solid fa-box-open"></i> سجل الطلبات المربوطة بالحساب</h3>
                 <div id="userOrdersContainer">
@@ -173,7 +243,7 @@
     </footer>
 
     <script>
-        // إعدادات Firebase
+        // إعدادات Firebase v8
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForDesProgram...",
             authDomain: "desprogram-89c6a.firebaseapp.com",
@@ -202,45 +272,186 @@
             }
         }
 
-        // معالجة تسجيل الدخول
+        let generatedOtp = "";
+        let countdownInterval;
+
+        const phoneField = document.getElementById('phoneInput');
+        phoneField.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        const passwordInput = document.getElementById('passwordInput');
+        const togglePassword = document.getElementById('togglePassword');
+        togglePassword.addEventListener('click', function() {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                this.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
+
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+        passwordInput.addEventListener('input', function() {
+            const val = this.value;
+            let strength = 0;
+            if (val.length >= 6) strength++;
+            if (val.length >= 10) strength++;
+            if (/[A-Z]/.test(val) && /[0-9]/.test(val)) strength++;
+            if (/[^A-Za-z0-9]/.test(val)) strength++;
+
+            if (val.length === 0) {
+                strengthFill.style.width = '0%';
+                strengthText.innerText = "قوة كلمة المرور";
+            } else if (strength <= 1) {
+                strengthFill.style.width = '33%';
+                strengthFill.style.background = '#ff007f';
+                strengthText.innerText = "ضعيفة";
+            } else if (strength === 2 || strength === 3) {
+                strengthFill.style.width = '66%';
+                strengthFill.style.background = '#ffaa00';
+                strengthText.innerText = "متوسطة";
+            } else {
+                strengthFill.style.width = '100%';
+                strengthFill.style.background = '#00d2ff';
+                strengthText.innerText = "قوية جداً";
+            }
+        });
+
+        const otpBoxes = document.querySelectorAll('.otp-box');
+        otpBoxes.forEach((box, index) => {
+            box.addEventListener('input', (e) => {
+                const val = e.target.value.replace(/\D/g, '');
+                e.target.value = val;
+                if (val && index < otpBoxes.length - 1) {
+                    otpBoxes[index + 1].focus();
+                }
+            });
+            box.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !box.value && index > 0) {
+                    otpBoxes[index - 1].focus();
+                }
+            });
+        });
+
+        function startTimer() {
+            let timeLeft = 60;
+            const resendBtn = document.getElementById('resendBtn');
+            resendBtn.disabled = true;
+            
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    resendBtn.innerText = "إعادة إرسال الكود";
+                    resendBtn.disabled = false;
+                } else {
+                    resendBtn.innerText = `إعادة الإرسال خلال (${timeLeft} ثانية)`;
+                    timeLeft--;
+                }
+            }, 1000);
+        }
+
+        function sendOtpProcess() {
+            const phoneVal = phoneField.value.trim();
+            const errorMsg = document.getElementById('phoneError');
+
+            if (phoneVal.length !== 9) {
+                errorMsg.style.display = 'block';
+                return;
+            }
+            errorMsg.style.display = 'none';
+
+            const fullPhone = "+970" + phoneVal;
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            
+            alert("تم إرسال كود التحقق بنجاح إلى الرقم: " + fullPhone + " \n(للتجربة، الكود هو: " + generatedOtp + ")");
+
+            document.getElementById('otpBox').style.display = 'block';
+            document.getElementById('sendOtpBtn').style.display = 'none';
+            otpBoxes[0].focus();
+            
+            startTimer();
+        }
+
+        document.getElementById('sendOtpBtn').addEventListener('click', sendOtpProcess);
+        document.getElementById('resendBtn').addEventListener('click', sendOtpProcess);
+
+        // إتمام تسجيل الدخول وحفظ البيانات في Firestore وفي الذاكرة المحلية
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const name = document.getElementById('loginName').value.trim();
-            const phone = document.getElementById('loginPhone').value.trim();
+            
+            let enteredOtp = "";
+            otpBoxes.forEach(box => enteredOtp += box.value);
 
-            if(name && phone) {
+            const otpErrorMsg = document.getElementById('otpErrorMsg');
+
+            if (enteredOtp.length !== 4) {
+                otpErrorMsg.innerText = "يرجى إدخال أرقام الكود الأربعة كاملة!";
+                otpErrorMsg.style.display = 'block';
+                return;
+            }
+
+            if (enteredOtp !== generatedOtp) {
+                otpErrorMsg.innerText = "كود التحقق غير صحيح! يرجى المحاولة مرة أخرى.";
+                otpErrorMsg.style.display = 'block';
+                return;
+            }
+            otpErrorMsg.style.display = 'none';
+
+            const name = document.getElementById('userName').value.trim();
+            const fullPhone = "+970" + phoneField.value.trim();
+            const password = passwordInput.value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            db.collection("client_logins").add({
+                name: name,
+                phone: fullPhone,
+                password: password,
+                loginTime: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("userName", name);
-                localStorage.setItem("userPhone", phone);
+                localStorage.setItem("clientPhone", fullPhone);
+                
+                if (rememberMe) {
+                    localStorage.setItem("rememberUser", "active");
+                }
+
+                alert("تم تسجيل الدخول بنجاح!");
                 checkAuthState();
-            }
+            }).catch((error) => {
+                console.error("خطأ في حفظ البيانات:", error);
+                alert("حدث خطأ ما، يرجى المحاولة لاحقاً.");
+            });
         });
 
         // تسجيل الخروج
         function logoutUser() {
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("userName");
-            localStorage.removeItem("userPhone");
-            checkAuthState();
+            localStorage.removeItem("clientPhone");
+            localStorage.removeItem("rememberUser");
+            location.reload();
         }
 
-        // تحميل معلومات المستخدم الحقيقية والطلبات المرتبطة به من Firestore
+        // تحميل البيانات الحقيقية والطلبات المرتبطة بالعميل من Firestore
         function loadUserData() {
             const currentName = localStorage.getItem("userName");
-            const currentPhone = localStorage.getItem("userPhone");
+            const currentPhone = localStorage.getItem("clientPhone");
 
-            // تعيين البيانات المحلية المبدئية
             document.getElementById('displayUserName').innerText = currentName || "غير متوفر";
             document.getElementById('displayUserPhone').innerText = currentPhone || "غير متوفر";
 
             const ordersContainer = document.getElementById('userOrdersContainer');
             
-            // البحث عن بيانات العميل والطلبات الحقيقية من Firestore باستخدام رقم الهاتف أو الاسم
+            // البحث عن طلبات العميل الحقيقية باستخدام رقم الهاتف أو الاسم
             db.collection("orders")
             .where("phone", "==", currentPhone)
             .get()
             .then((querySnapshot) => {
-                // إذا لم يجد برقم الهاتف جرب البحث باسم العميل
                 if (querySnapshot.empty) {
                     return db.collection("orders").where("clientName", "==", currentName).get();
                 }
@@ -248,7 +459,7 @@
             })
             .then((querySnapshot) => {
                 if (!querySnapshot || querySnapshot.empty) {
-                    ordersContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 15px;">لا توجد طلبات مسجلة بهذا الاسم/الرقم بعد.</p>`;
+                    ordersContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 15px;">لا توجد طلبات مسجلة بهذا الحساب حتى الآن.</p>`;
                     return;
                 }
 
@@ -266,7 +477,7 @@
                     html += `
                         <div class="order-item-box">
                             <div>
-                                <strong style="color: #fff; font-size: 1.05rem;">${data.selectedProduct || 'طلب منتج NFC'}</strong>
+                                <strong style="color: #fff; font-size: 1.05rem;">${data.selectedProduct || 'طلب منتج NFC / خدمات رقمية'}</strong>
                                 <div class="order-details">
                                     <p><i class="fa-solid fa-cubes"></i> الكمية: ${data.quantity || 1} | <i class="fa-solid fa-truck"></i> الاستلام: ${data.deliveryMethod || 'توصيل'}</p>
                                     <p><i class="fa-solid fa-calendar-days"></i> تاريخ الطلب: ${dateStr}</p>
@@ -292,7 +503,7 @@
 
         window.onload = checkAuthState;
 
-        // تأثير خلفية الهيدر عند التمرير
+        // تأثير الهيدر عند التمرير
         window.addEventListener('scroll', function() {
             const header = document.getElementById('mainHeader');
             if (window.pageYOffset > 50) {
