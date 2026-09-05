@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Des Program - لوحة حسابي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- مكتبة Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <style>
+        :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        header { 
+            position: fixed; top: 0; left: 0; width: 100%; 
+            background: rgba(5, 5, 8, 0.9); backdrop-filter: blur(12px); 
+            border-bottom: 1px solid var(--border-color); 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 12px 5%; z-index: 1000; 
+        }
+        .logo-container { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .logo-container img { height: 32px; object-fit: contain; border-radius: 6px; }
+        .logo-text { font-size: 1rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        nav ul { display: flex; list-style: none; gap: 15px; align-items: center; }
+        nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.85rem; transition: 0.3s; }
+        nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+
+        .main-content { padding: 130px 5% 60px; max-width: 900px; margin: 0 auto; width: 100%; flex-grow: 1; }
+        
+        /* واجهة تسجيل الدخول في حال لم يكن مسجلاً */
+        .auth-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; text-align: center; max-width: 450px; margin: 40px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .auth-card h2 { font-size: 1.8rem; margin-bottom: 15px; color: #fff; }
+        .auth-card h2 span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .auth-card p { color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem; }
+        .form-group { margin-bottom: 20px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; }
+        .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.3); }
+        
+        .action-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(157, 78, 221, 0.4); }
+        .action-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* لوحة معلومات العميل والطلبات (تظهر عند تسجيل الدخول) */
+        .dashboard-section { display: none; }
+        .section-title { font-size: 2.2rem; font-weight: 900; margin-bottom: 10px; text-align: center; }
+        .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; }
+
+        .dash-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; margin-bottom: 25px; }
+        .dash-card h3 { color: var(--primary-blue); margin-bottom: 15px; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+        
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; font-size: 0.95rem; }
+        .info-row span { color: var(--text-muted); }
+        .info-row strong { color: #fff; }
+
+        .logout-btn { background: rgba(255, 0, 127, 0.15); border: 1px solid #ff007f; color: #ff007f; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; }
+        .logout-btn:hover { background: #ff007f; color: #fff; box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
+
+        .order-item-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; margin-bottom: 12px; border-right: 4px solid var(--primary-blue); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .order-details p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+
+        footer { text-align: center; padding: 25px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; background: var(--bg-color); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-container">
+            <img src="descard.jpg" alt="Logo" onerror="this.style.display='none'">
+            <span class="logo-text">Des Program</span>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html">الرئيسية والمنتجات</a></li>
+                <li><a href="account.html" class="active">حسابي</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <!-- قسم تسجيل الدخول (يظهر إذا لم يكن الزبون مسجلاً) -->
+        <div id="loginSection" class="auth-card" style="display: none;">
+            <h2>تسجيل دخول <span>العملاء</span></h2>
+            <p>أدخل اسمك ورقم هاتفك للوصول الفوري إلى لوحة تحكم حسابك ومتابعة طلباتك.</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" id="loginName" required placeholder="مثال: أحمد محمد">
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف الشخصي</label>
+                    <input type="tel" id="loginPhone" required placeholder="05xxxxxxxx">
+                </div>
+                <button type="submit" class="action-btn">دخول إلى حسابي</button>
+            </form>
+        </div>
+
+        <!-- قسم لوحة التحكم (يظهر إذا كان الزبون مسجلاً بالفعل) -->
+        <div id="dashboardSection" class="dashboard-section">
+            <h2 class="section-title">لوحة تحكم <span>الحساب الشخصي</span></h2>
+            <p class="section-subtitle">أهلاً بك مجدداً، يمكنك من هنا متابعة طلباتك وإدارة حسابك بكل سهولة</p>
+
+            <!-- بطاقة معلومات العميل -->
+            <div class="dash-card">
+                <h3><i class="fa-solid fa-id-card"></i> المعلومات الشخصية</h3>
+                <div class="info-row">
+                    <span>اسم العميل المسجل:</span>
+                    <strong id="displayUserName">-</strong>
+                </div>
+                <div class="info-row">
+                    <span>رقم الهاتف المعتمد:</span>
+                    <strong id="displayUserPhone">-</strong>
+                </div>
+                <div class="info-row">
+                    <span>حالة العضوية:</span>
+                    <strong style="color: #25d366;"><i class="fa-solid fa-circle-check"></i> عميل معتمد ومصرح له</strong>
+                </div>
+                <button class="logout-btn" onclick="logoutUser()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
+            </div>
+
+            <!-- بطاقة متابعة الطلبات -->
+            <div class="dash-card">
+                <h3><i class="fa-solid fa-box-open"></i> سجل الطلبات السابقة</h3>
+                <div id="userOrdersContainer">
+                    <p style="color: var(--text-muted); text-align: center; padding: 15px;">جاري تحميل طلباتك السابقة...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 Des Program • Code • Create • Solve</p>
+    </footer>
+
+    <script>
+        // إعدادات Firebase (نفس إعدادات مشروعك)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForDesProgram...",
+            authDomain: "desprogram-89c6a.firebaseapp.com",
+            projectId: "desprogram-89c6a",
+            storageBucket: "desprogram-89c6a.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:1234:web:1234"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        // فحص حالة تسجيل الدخول عند تحميل الصفحة
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+
+        function checkAuthState() {
+            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+            if (isLoggedIn) {
+                loginSection.style.display = 'none';
+                dashboardSection.style.display = 'block';
+                loadUserData();
+            } else {
+                loginSection.style.display = 'block';
+                dashboardSection.style.display = 'none';
+            }
+        }
+
+        // معالجة نموذج تسجيل الدخول البسيط
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('loginName').value.trim();
+            const phone = document.getElementById('loginPhone').value.trim();
+
+            if(name && phone) {
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userName", name);
+                localStorage.setItem("userPhone", phone);
+                alert("مرحباً بك " + name + "! تم تسجيل دخولك بنجاح.");
+                checkAuthState();
+            }
+        });
+
+        // دالة تسجيل الخروج
+        function logoutUser() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("userPhone");
+            alert("تم تسجيل الخروج بنجاح.");
+            checkAuthState();
+        }
+
+        // تحميل بيانات المستخدم وطلباته من قاعدة البيانات
+        function loadUserData() {
+            const currentName = localStorage.getItem("userName");
+            const currentPhone = localStorage.getItem("userPhone");
+
+            document.getElementById('displayUserName').innerText = currentName || "غير متوفر";
+            document.getElementById('displayUserPhone').innerText = currentPhone || "غير متوفر";
+
+            const ordersContainer = document.getElementById('userOrdersContainer');
+            
+            // جلب الطلبات المطابقة لاسم العميل من قاعدة بيانات Firestore
+            db.collection("orders").where("clientName", "==", currentName).get()
+            .then((querySnapshot) => {
+                if (querySnapshot.empty) {
+                    ordersContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 10px;">لا توجد طلبات سابقة مسجلة باسمك حتى الآن.</p>`;
+                    return;
+                }
+                
+                let html = "";
+                querySnapshot.forEach((doc) => {
+                    let data = doc.data();
+                    let dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString('ar-EG') : 'حديثاً';
+                    
+                    html += `
+                        <div class="order-item-box">
+                            <div>
+                                <strong style="color: #fff; font-size: 1.05rem;">${data.selectedProduct}</strong>
+                                <div class="order-details">
+                                    <p><i class="fa-solid fa-cubes"></i> الكمية: ${data.quantity} | <i class="fa-solid fa-truck"></i> الاستلام: ${data.deliveryMethod}</p>
+                                    <p><i class="fa-solid fa-calendar-days"></i> تاريخ الطلب: ${dateStr}</p>
+                                </div>
+                            </div>
+                            <span style="background: rgba(0, 210, 255, 0.15); color: var(--primary-blue); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; border: 1px solid var(--border-color);">قيد التنفيذ / مكتمل</span>
+                        </div>
+                    `;
+                });
+                ordersContainer.innerHTML = html;
+            })
+            .catch((error) => {
+                console.error("خطأ في جلب الطلبات:", error);
+                ordersContainer.innerHTML = `<p style="color: #ff007f; text-align: center;">حدث خطأ أثناء تحميل الطلبات السابقة.</p>`;
+            });
+        }
+
+        // تنفيذ التحقق عند بدء التشغيل
+        window.onload = checkAuthState;
+    </script>
+</body>
+</html>
