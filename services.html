@@ -10,7 +10,7 @@
     <style>
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
-        body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
+        body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
         
         header { 
             position: fixed; top: 0; left: 0; width: 100%; 
@@ -41,12 +41,12 @@
             nav ul li a { font-size: 0.75rem; }
         }
 
-        .services { padding: 140px 5% 80px; max-width: 1200px; margin: 0 auto; }
+        .main-content { padding: 150px 5% 60px; max-width: 1200px; margin: 0 auto; width: 100%; flex-grow: 1; }
         .section-title { text-align: center; font-size: 2.3rem; margin-bottom: 40px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .service-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px 20px; text-align: center; transition: 0.4s; }
+        .service-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px 20px; text-align: center; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .service-card:hover { transform: translateY(-8px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15); }
         .service-icon { font-size: 2.8rem; margin-bottom: 15px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .service-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; color: #fff; }
@@ -62,7 +62,6 @@
             <span class="logo-text">Des Program</span>
         </a>
         
-        <!-- الشريط العلوي الموحد لكافة الأقسام ومن ضمنها حسابي -->
         <nav>
             <ul>
                 <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
@@ -75,29 +74,31 @@
         </nav>
     </header>
 
-    <section class="services">
-        <h2 class="section-title">خدماتنا <span>التقنية المتكاملة</span></h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <i class="fa-solid fa-code service-icon"></i>
-                <h3 class="service-title">برمجة وتطوير المواقع</h3>
-                <p class="service-desc">تصميم وتطوير مواقع إلكترونية احترافية مخصصة بالكامل حسب طلب الزبون وحاجته وبأحدث التقنيات.</p>
+    <div class="main-content">
+        <section class="services">
+            <h2 class="section-title">خدماتنا <span>التقنية المتكاملة</span></h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fa-solid fa-code service-icon"></i>
+                    <h3 class="service-title">برمجة وتطوير المواقع</h3>
+                    <p class="service-desc">تصميم وتطوير مواقع إلكترونية احترافية مخصصة بالكامل حسب طلب الزبون وحاجته وبأحدث التقنيات.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fa-solid fa-wifi service-icon"></i>
+                    <h3 class="service-title">أنظمة وربط NFC</h3>
+                    <p class="service-desc">دمج وبرمجة شرائح التفاعل القريب (NFC) للمنتجات والبطاقات الذكية لتجربة تفاعلية مذهلة.</p>
+                </div>
+                <div class="service-card">
+                    <i class="fa-solid fa-cube service-icon"></i>
+                    <h3 class="service-title">تصميم الدروع الحديثة المدمجة بتقنية NFC</h3>
+                    <p class="service-desc">حفر وتشكيل الدروع المكتبية (أكريليك و CNC) بدقة عالية مع تلبية طلبات الكميات لأصحاب المصالح.</p>
+                </div>
             </div>
-            <div class="service-card">
-                <i class="fa-solid fa-wifi service-icon"></i>
-                <h3 class="service-title">أنظمة وربط NFC</h3>
-                <p class="service-desc">دمج وبرمجة شرائح التفاعل القريب (NFC) للمنتجات والبطاقات الذكية لتجربة تفاعلية مذهلة.</p>
-            </div>
-            <div class="service-card">
-                <i class="fa-solid fa-cube service-icon"></i>
-                <h3 class="service-title">تصميم الدروع الحديثة المدمجة بتقنية NFC</h3>
-                <p class="service-desc">حفر وتشكيل الدروع المكتبية (أكريليك و CNC) بدقة عالية مع تلبية طلبات الكميات لأصحاب المصالح.</p>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <footer>
-        <p>جميع الحقوق محفوظة &copy; 2026 Des Program | Code • Create • Solve</p>
+        <p>جميع الحقوق محفوظة &copy; 2026 Des Program • Code • Create • Solve</p>
     </footer>
 
     <script>
