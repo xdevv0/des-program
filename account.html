@@ -13,7 +13,7 @@
 
     <style>
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
         body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
         
         header { 
@@ -22,18 +22,109 @@
             border-bottom: 1px solid var(--border-color); 
             display: flex; justify-content: space-between; align-items: center; 
             padding: 12px 5%; z-index: 1000; 
+            transition: background-color 0.3s ease;
         }
+        header.scrolled { background: rgba(5, 5, 8, 0.98); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+
         .logo-container { display: flex; align-items: center; gap: 8px; text-decoration: none; }
         .logo-container img { height: 32px; object-fit: contain; border-radius: 6px; }
-        .logo-text { font-size: 1rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-text { font-size: 1rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        nav ul { display: flex; list-style: none; gap: 15px; align-items: center; }
-        nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.85rem; transition: 0.3s; }
-        nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        /* زر الـ 3 شحطات الجانبي */
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+        .hamburger-btn:hover { color: var(--primary-blue); }
+
+        /* القائمة الجانبية (Sidebar) */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background: var(--card-bg);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.7);
+            z-index: 2500;
+            transition: right 0.4s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .side-menu.open { right: 0; }
+
+        .side-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .close-side-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-side-btn:hover { color: #ff007f; }
+
+        .side-menu-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .side-menu-links li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 500;
+            padding: 10px 12px;
+            border-radius: 8px;
+            transition: 0.3s;
+            background: rgba(255,255,255,0.02);
+        }
+        .side-menu-links li a:hover, .side-menu-links li a.active {
+            background: rgba(0, 210, 255, 0.1);
+            color: var(--primary-blue);
+            transform: translateX(-5px);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .menu-overlay.active { display: block; opacity: 1; }
 
         .main-content { padding: 130px 5% 60px; max-width: 900px; margin: 0 auto; width: 100%; flex-grow: 1; }
         
-        /* واجهة تسجيل الدخول في حال لم يكن مسجلاً */
+        /* واجهة تسجيل الدخول */
         .auth-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; text-align: center; max-width: 450px; margin: 40px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .auth-card h2 { font-size: 1.8rem; margin-bottom: 15px; color: #fff; }
         .auth-card h2 span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -46,7 +137,7 @@
         .action-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(157, 78, 221, 0.4); }
         .action-btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        /* لوحة معلومات العميل والطلبات (تظهر عند تسجيل الدخول) */
+        /* لوحة التحكم */
         .dashboard-section { display: none; }
         .section-title { font-size: 2.2rem; font-weight: 900; margin-bottom: 10px; text-align: center; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -55,9 +146,9 @@
         .dash-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; margin-bottom: 25px; }
         .dash-card h3 { color: var(--primary-blue); margin-bottom: 15px; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
         
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; font-size: 0.95rem; }
-        .info-row span { color: var(--text-muted); }
-        .info-row strong { color: #fff; }
+        .info-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; font-size: 0.95rem; }
+        .info-row span { color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+        .info-row strong { color: #fff; text-align: left; }
 
         .logout-btn { background: rgba(255, 0, 127, 0.15); border: 1px solid #ff007f; color: #ff007f; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; }
         .logout-btn:hover { background: #ff007f; color: #fff; box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
@@ -70,24 +161,42 @@
 </head>
 <body>
 
-    <header>
+    <header id="mainHeader">
         <a href="index.html" class="logo-container">
             <img src="descard.jpg" alt="Logo" onerror="this.style.display='none'">
             <span class="logo-text">Des Program</span>
         </a>
-        <nav>
-            <ul>
-                <li><a href="index.html">الرئيسية والمنتجات</a></li>
-                <li><a href="account.html" class="active">حسابي</a></li>
-            </ul>
-        </nav>
+        
+        <!-- زر الـ 3 شحطات الجانبي -->
+        <button class="hamburger-btn" onclick="toggleSideMenu()" title="قائمة الأقسام">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </header>
 
+    <!-- طبقة التعتيم الخلفية -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleSideMenu()"></div>
+
+    <!-- القائمة الجانبية التي تضم كافة أقسام الموقع -->
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <span class="logo-text" style="font-size: 1.1rem;">أقسام الموقع</span>
+            <button class="close-side-btn" onclick="toggleSideMenu()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="side-menu-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
+            <li><a href="products.html"><i class="fa-solid fa-box-open"></i> المنتجات والطلب</a></li>
+            <li><a href="services.html"><i class="fa-solid fa-layer-group"></i> خدماتنا</a></li>
+            <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
+            <li><a href="contact.html"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
+            <li><a href="account.html" class="active"><i class="fa-solid fa-user-gear"></i> حسابي (لوحة التحكم)</a></li>
+        </ul>
+    </div>
+
     <div class="main-content">
-        <!-- قسم تسجيل الدخول (يظهر إذا لم يكن الزبون مسجلاً) -->
+        <!-- قسم تسجيل الدخول -->
         <div id="loginSection" class="auth-card" style="display: none;">
             <h2>تسجيل دخول <span>العملاء</span></h2>
-            <p>أدخل اسمك ورقم هاتفك للوصول الفوري إلى لوحة تحكم حسابك ومتابعة طلباتك.</p>
+            <p>أدخل اسمك ورقم هاتفك للوصول الفوري إلى بياناتك المعتمدة ومتابعة طلباتك.</p>
             <form id="loginForm">
                 <div class="form-group">
                     <label>الاسم الكامل</label>
@@ -101,34 +210,48 @@
             </form>
         </div>
 
-        <!-- قسم لوحة التحكم (يظهر إذا كان الزبون مسجلاً بالفعل) -->
+        <!-- قسم لوحة التحكم مع تفاصيل المستخدم الحقيقية -->
         <div id="dashboardSection" class="dashboard-section">
             <h2 class="section-title">لوحة تحكم <span>الحساب الشخصي</span></h2>
-            <p class="section-subtitle">أهلاً بك مجدداً، يمكنك من هنا متابعة طلباتك وإدارة حسابك بكل سهولة</p>
+            <p class="section-subtitle">أهلاً بك مجدداً، يمكنك من هنا رؤية بياناتك المسجلة ومتابعة كافة طلباتك</p>
 
-            <!-- بطاقة معلومات العميل -->
+            <!-- بطاقة معلومات العميل الحقيقية -->
             <div class="dash-card">
-                <h3><i class="fa-solid fa-id-card"></i> المعلومات الشخصية</h3>
+                <h3><i class="fa-solid fa-id-card"></i> البيانات الشخصية المسجلة</h3>
+                
                 <div class="info-row">
-                    <span>اسم العميل المسجل:</span>
-                    <strong id="displayUserName">-</strong>
+                    <span><i class="fa-solid fa-user"></i> اسم العميل:</span>
+                    <strong id="displayUserName">جاري التحميل...</strong>
                 </div>
+                
                 <div class="info-row">
-                    <span>رقم الهاتف المعتمد:</span>
-                    <strong id="displayUserPhone">-</strong>
+                    <span><i class="fa-solid fa-phone"></i> رقم الهاتف المعتمد:</span>
+                    <strong id="displayUserPhone">جاري التحميل...</strong>
                 </div>
+
                 <div class="info-row">
-                    <span>حالة العضوية:</span>
-                    <strong style="color: #25d366;"><i class="fa-solid fa-circle-check"></i> عميل معتمد ومصرح له</strong>
+                    <span><i class="fa-solid fa-envelope"></i> البريد الإلكتروني:</span>
+                    <strong id="displayUserEmail">غير محدد</strong>
                 </div>
+
+                <div class="info-row">
+                    <span><i class="fa-solid fa-location-dot"></i> المنطقة / المدينة:</span>
+                    <strong id="displayUserCity">غير محددة</strong>
+                </div>
+
+                <div class="info-row">
+                    <span><i class="fa-solid fa-shield-halved"></i> حالة العضوية:</span>
+                    <strong style="color: #25d366;"><i class="fa-solid fa-circle-check"></i> حساب موثوق ومعتمد</strong>
+                </div>
+
                 <button class="logout-btn" onclick="logoutUser()"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
             </div>
 
             <!-- بطاقة متابعة الطلبات -->
             <div class="dash-card">
-                <h3><i class="fa-solid fa-box-open"></i> سجل الطلبات السابقة</h3>
+                <h3><i class="fa-solid fa-box-open"></i> سجل الطلبات المربوطة بالحساب</h3>
                 <div id="userOrdersContainer">
-                    <p style="color: var(--text-muted); text-align: center; padding: 15px;">جاري تحميل طلباتك السابقة...</p>
+                    <p style="color: var(--text-muted); text-align: center; padding: 15px;">جاري تحميل طلباتك من قاعدة البيانات...</p>
                 </div>
             </div>
         </div>
@@ -139,7 +262,7 @@
     </footer>
 
     <script>
-        // إعدادات Firebase (نفس إعدادات مشروعك)
+        // إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForDesProgram...",
             authDomain: "desprogram-89c6a.firebaseapp.com",
@@ -153,7 +276,14 @@
         }
         const db = firebase.firestore();
 
-        // فحص حالة تسجيل الدخول عند تحميل الصفحة
+        // فتح وإغلاق القائمة الجانبية
+        function toggleSideMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            sideMenu.classList.toggle('open');
+            menuOverlay.classList.toggle('active');
+        }
+
         const loginSection = document.getElementById('loginSection');
         const dashboardSection = document.getElementById('dashboardSection');
 
@@ -169,9 +299,8 @@
             }
         }
 
-        // معالجة نموذج تسجيل الدخول البسيط
-        const loginForm = document.getElementById('loginForm');
-        loginForm.addEventListener('submit', function(e) {
+        // معالجة تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('loginName').value.trim();
             const phone = document.getElementById('loginPhone').value.trim();
@@ -180,66 +309,97 @@
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("userName", name);
                 localStorage.setItem("userPhone", phone);
-                alert("مرحباً بك " + name + "! تم تسجيل دخولك بنجاح.");
                 checkAuthState();
             }
         });
 
-        // دالة تسجيل الخروج
+        // تسجيل الخروج
         function logoutUser() {
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("userName");
             localStorage.removeItem("userPhone");
-            alert("تم تسجيل الخروج بنجاح.");
             checkAuthState();
         }
 
-        // تحميل بيانات المستخدم وطلباته من قاعدة البيانات
+        // تحميل معلومات المستخدم الحقيقية والطلبات المرتبطة به من Firestore
         function loadUserData() {
             const currentName = localStorage.getItem("userName");
             const currentPhone = localStorage.getItem("userPhone");
 
+            // تعيين البيانات المحلية المبدئية
             document.getElementById('displayUserName').innerText = currentName || "غير متوفر";
             document.getElementById('displayUserPhone').innerText = currentPhone || "غير متوفر";
 
             const ordersContainer = document.getElementById('userOrdersContainer');
             
-            // جلب الطلبات المطابقة لاسم العميل من قاعدة بيانات Firestore
-            db.collection("orders").where("clientName", "==", currentName).get()
+            // البحث عن بيانات العميل والطلبات الحقيقية من Firestore باستخدام رقم الهاتف أو الاسم
+            db.collection("orders")
+            .where("phone", "==", currentPhone)
+            .get()
             .then((querySnapshot) => {
+                // إذا لم يجد برقم الهاتف جرب البحث باسم العميل
                 if (querySnapshot.empty) {
-                    ordersContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 10px;">لا توجد طلبات سابقة مسجلة باسمك حتى الآن.</p>`;
+                    return db.collection("orders").where("clientName", "==", currentName).get();
+                }
+                return querySnapshot;
+            })
+            .then((querySnapshot) => {
+                if (!querySnapshot || querySnapshot.empty) {
+                    ordersContainer.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 15px;">لا توجد طلبات مسجلة بهذا الاسم/الرقم بعد.</p>`;
                     return;
                 }
-                
+
                 let html = "";
+                let userEmail = "";
+                let userCity = "";
+
                 querySnapshot.forEach((doc) => {
                     let data = doc.data();
-                    let dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString('ar-EG') : 'حديثاً';
+                    let dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleDateString('ar-EG') : 'مؤخراً';
                     
+                    // استخراج البريد والمدينة الحقيقية من بيانات الطلبات المسجلة إن وجدت
+                    if (data.email) userEmail = data.email;
+                    if (data.city || data.address) userCity = data.city || data.address;
+
                     html += `
                         <div class="order-item-box">
                             <div>
-                                <strong style="color: #fff; font-size: 1.05rem;">${data.selectedProduct}</strong>
+                                <strong style="color: #fff; font-size: 1.05rem;">${data.selectedProduct || 'طلب منتج NFC'}</strong>
                                 <div class="order-details">
-                                    <p><i class="fa-solid fa-cubes"></i> الكمية: ${data.quantity} | <i class="fa-solid fa-truck"></i> الاستلام: ${data.deliveryMethod}</p>
+                                    <p><i class="fa-solid fa-cubes"></i> الكمية: ${data.quantity || 1} | <i class="fa-solid fa-truck"></i> الاستلام: ${data.deliveryMethod || 'توصيل'}</p>
                                     <p><i class="fa-solid fa-calendar-days"></i> تاريخ الطلب: ${dateStr}</p>
                                 </div>
                             </div>
-                            <span style="background: rgba(0, 210, 255, 0.15); color: var(--primary-blue); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; border: 1px solid var(--border-color);">قيد التنفيذ / مكتمل</span>
+                            <span style="background: rgba(0, 210, 255, 0.15); color: var(--primary-blue); padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; border: 1px solid var(--border-color); font-weight: 700;">
+                                ${data.status || 'قيد المراجعة والتنفيذ'}
+                            </span>
                         </div>
                     `;
                 });
+
+                // تحديث بيانات المستخدم التفصيلية الحقيقية التي عُثر عليها
+                if (userEmail) document.getElementById('displayUserEmail').innerText = userEmail;
+                if (userCity) document.getElementById('displayUserCity').innerText = userCity;
+
                 ordersContainer.innerHTML = html;
             })
             .catch((error) => {
-                console.error("خطأ في جلب الطلبات:", error);
-                ordersContainer.innerHTML = `<p style="color: #ff007f; text-align: center;">حدث خطأ أثناء تحميل الطلبات السابقة.</p>`;
+                console.error("خطأ في جلب البيانات:", error);
+                ordersContainer.innerHTML = `<p style="color: #ff007f; text-align: center; padding: 10px;">حدث خطأ أثناء تحميل بيانات الطلبات.</p>`;
             });
         }
 
-        // تنفيذ التحقق عند بدء التشغيل
         window.onload = checkAuthState;
+
+        // تأثير خلفية الهيدر عند التمرير
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('mainHeader');
+            if (window.pageYOffset > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
     </script>
 </body>
 </html>
