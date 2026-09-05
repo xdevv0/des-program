@@ -33,7 +33,7 @@
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 50px; font-size: 1.1rem; }
         
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; direction: rtl; }
         .product-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; position: relative; }
         .product-card:hover { transform: translateY(-8px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15); }
         .product-img-container { width: 100%; height: 240px; overflow: hidden; background: #000; position: relative; }
@@ -111,7 +111,7 @@
             <!-- درع CNC NFC -->
             <div class="product-card">
                 <div class="product-img-container">
-                    <img src="ccncard.jpg" alt="درع CNC NFC" onerror="this.src='https://via.placeholder.com/400x300?text=CNCCard'">
+                    <img src="ccncard.png" alt="درع CNC NFC" onerror="this.src='https://via.placeholder.com/400x300?text=CNCCard'">
                     <img src="descard.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
                 </div>
                 <div class="product-content">
@@ -129,7 +129,7 @@
             <!-- درع أكريليك NFC -->
             <div class="product-card">
                 <div class="product-img-container">
-                    <img src="acrelac.jpg" alt="درع أكريليك NFC" onerror="this.src='https://via.placeholder.com/400x300?text=AcrelacCard'">
+                    <img src="acrelac.png" alt="درع أكريليك NFC" onerror="this.src='https://via.placeholder.com/400x300?text=AcrelacCard'">
                     <img src="descard.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
                 </div>
                 <div class="product-content">
@@ -150,7 +150,7 @@
             <form id="orderForm">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>الاسم الكريم *</label>
+                        <label>الاسم الكامل *</label>
                         <input type="text" id="clientName" required placeholder="أدخل اسمك الكامل">
                     </div>
                     <div class="form-group">
