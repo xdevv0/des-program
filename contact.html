@@ -3,17 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Des Program - تواصل معنا</title>
+    <title>Des Program - ماذا نقدم وفكرة المشروع</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- كود حماية الصفحة والتحقق من تسجيل الدخول -->
-    <script>
-        if (localStorage.getItem("isLoggedIn") !== "true") {
-            window.location.href = "login.html";
-        }
-    </script>
-
     <style>
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
@@ -58,27 +51,24 @@
             nav ul { gap: 8px; }
             nav ul li a { font-size: 0.7rem; }
         }
-
-        .contact { padding: 130px 5% 80px; max-width: 700px; margin: 0 auto; }
+        
+        .about { padding: 140px 5% 80px; max-width: 1000px; margin: 0 auto; }
         .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 30px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .contact-content { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; text-align: center; }
-        .contact-content p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px; line-height: 1.6; }
-        .social-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .social-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 700; color: #fff; transition: 0.3s; }
-        .whatsapp-btn { background: #25d366; box-shadow: 0 0 15px rgba(37, 211, 102, 0.4); }
-        .whatsapp-btn:hover { background: #20ba5a; transform: translateY(-3px); }
-        .instagram-btn { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #fd1d1d); box-shadow: 0 0 15px rgba(193, 53, 132, 0.4); }
-        .instagram-btn:hover { opacity: 0.9; transform: translateY(-3px); }
         
-        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; position: fixed; bottom: 0; width: 100%; background: var(--bg-color); }
-        @media(max-width: 768px) { footer { position: relative; margin-top: 50px; } }
+        .about-content { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; line-height: 1.9; color: var(--text-muted); font-size: 1.05rem; }
+        .about-content h3 { color: var(--primary-blue); font-size: 1.4rem; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .about-content h3:first-child { margin-top: 0; }
+        .about-content p { margin-bottom: 20px; }
+        .about-content strong { color: #fff; }
+
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; margin-top: 50px; background: var(--bg-color); }
     </style>
 </head>
 <body>
     <header id="mainHeader">
         <div class="logo-container">
-            <img src="dess.jpg" alt="Des Program Logo" onerror="this.style.display='none'">
+            <img src="descard.jpg" alt="Des Program Logo" onerror="this.style.display='none'">
             <span class="logo-text">Des Program</span>
         </div>
         <nav>
@@ -86,24 +76,24 @@
                 <li><a href="index.html">الرئيسية</a></li>
                 <li><a href="products.html">المنتجات والطلب</a></li>
                 <li><a href="services.html">خدماتنا</a></li>
-                <li><a href="about.html">من نحن</a></li>
-                <li><a href="contact.html" class="active">تواصل معنا</a></li>
+                <li><a href="about.html" class="active">ماذا نقدم وفكرة المشروع</a></li>
+                <li><a href="contact.html">تواصل معنا</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="contact">
-        <h2 class="section-title">تواصل <span>معنا </span></h2>
-        <div class="contact-content">
-            <p>للاستفسارات الخاصة والطلبات المخصصة لخدمات برمجة وتصميم مواقع الويب والدروع الذكية، يسعدنا تواصلكم معنا مباشرة:</p>
-            <div class="social-buttons">
-                <a href="https://wa.me/972566027617" target="_blank" class="social-btn whatsapp-btn">
-                    <i class="fa-brands fa-whatsapp fa-lg"></i> واتساب 
-                </a>
-                <a href="https://www.instagram.com/des_program?igsi=YXc0emN3bW9qc3M1" target="_blank" class="social-btn instagram-btn">
-                    <i class="fa-brands fa-instagram fa-lg"></i> انستغرام 
-                </a>
-            </div>
+    <section class="about">
+        <h2 class="section-title">فكرة مشروعنا <span>وماذا نقدم؟</span></h2>
+        <div class="about-content">
+            <h3><i class="fa-solid fa-lightbulb"></i> فكرة مشروعنا الفريدة</h3>
+            <p>تقوم فكرة <strong>Des Program</strong> على دمج العالم الرقمي بالواقع المادي بطريقة ذكية وسلسة. نحن لا نقتصر على تقديم بطاقات ودروع تقليدية، بل نصنع <strong>منظومة ربط متكاملة</strong>؛ حيث نقوم ببرمجة وتصميم مواقع إلكترونية متكاملة للزبائن، ومن ثم ربطها تقنياً بشرائح وقصات <strong>NFC</strong> المدمجة داخل بطاقات الأعمال أو الدروع المكتبية (CNC وأكريليك).</p>
+            <p>بمجرد تمرير الهاتف الذكي على الدرع أو البطاقة، يتم فتح موقع الشركة الإلكتروني فوراً على الهاتف بلا حاجة لتطبيقات معقدة، مما يمنح الشركات والمصالح التجارية هوية رقمية معاصرة وسريعة للغاية.</p>
+
+            <h3><i class="fa-solid fa-boxes-stacked"></i> ماذا نقدم في Des Program؟</h3>
+            <p><strong>1. برمجة وتصميم مواقع الويب:</strong> نبني مواقع إلكترونية احترافية مخصصة للشركات، الأفراد، وأصحاب المصالح، بتصميمات عصرية وسرعة فائقة.</p>
+            <p><strong>2. منتجات الـ NFC الذكية:</strong> نوفر بطاقات أعمال ذكية، دروع مكتبية بتقنية CNC، ودروع أكريليك فاخرة تحتوي على شرائح NFC برمجية دقيقة.</p>
+            <p><strong>3. حلول الطلب والربط المرن:</strong> نتيح للزبون إما اختيار تصميم وبرمجة الموقع بالكامل من طرفنا، أو ربط منتجات الـ NFC الخاصة بنا برابط موقعه الشخصي الجاهز مسبقاً.</p>
+            <p>نحن نعمل بشعارنا الثابت: <strong>Code • Create • Solve</strong> لنحول طموحاتك الرقمية إلى واقع ملموس.</p>
         </div>
     </section>
 
