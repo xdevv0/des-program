@@ -44,6 +44,10 @@
         nav ul li a.account-link { color: var(--primary-blue); border: 1px solid var(--border-color); padding: 3px 8px; border-radius: 6px; background: rgba(0, 210, 255, 0.05); }
         nav ul li a.account-link:hover { background: rgba(0, 210, 255, 0.15); }
         
+        /* زر تسجيل الدخول الاختياري */
+        .login-nav-btn { color: #fff !important; background: linear-gradient(135deg, rgba(0, 210, 255, 0.15) 0%, rgba(157, 78, 221, 0.15) 100%); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: 700 !important; transition: 0.3s; }
+        .login-nav-btn:hover { background: var(--accent-gradient); border-color: transparent; box-shadow: 0 0 10px rgba(0, 210, 255, 0.4); }
+
         @media(max-width: 768px) {
             header { justify-content: center; padding: 8px 2%; }
             nav ul { gap: 8px; }
@@ -56,6 +60,25 @@
         .btn { background: var(--accent-gradient); color: #fff; padding: 10px 30px; border-radius: 30px; text-decoration: none; font-weight: 700; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); transition: 0.3s; }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0, 210, 255, 0.7); }
         
+        /* واجهة مودال تسجيل الدخول */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .login-modal { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px; width: 100%; max-width: 400px; position: relative; animation: modalPopup 0.3s ease; }
+        @keyframes modalPopup { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .close-modal-btn { position: absolute; top: 15px; left: 15px; background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; transition: 0.3s; }
+        .close-modal-btn:hover { color: #ff007f; }
+
+        .login-modal h3 { font-size: 1.4rem; text-align: center; margin-bottom: 20px; color: #fff; }
+        .login-modal h3 span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 500; font-size: 0.85rem; }
+        .form-group input { width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+        
+        .submit-login-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); margin-top: 10px; }
+        .submit-login-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
         footer { text-align: center; padding: 25px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; background: var(--bg-color); }
     </style>
 </head>
@@ -73,6 +96,8 @@
                 <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
                 <li><a href="contact.html"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
                 <li><a href="account.html" class="account-link"><i class="fa-solid fa-user-gear"></i> حسابي</a></li>
+                <!-- زر تسجيل الدخول الاختياري الجديد -->
+                <li><button id="navLoginBtn" class="login-nav-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> تسجيل دخول</button></li>
             </ul>
         </nav>
     </header>
@@ -82,6 +107,25 @@
         <p>نبتكر حلولاً رقمية وتقنية متقدمة، ندمج البرمجة الذكية بتقنية NFC وحلول الويب الرسمية لأجل تجربة مستقبلية مميزة.</p>
         <a href="products.html" class="btn">استعرض المنتجات ونموذج الطلب</a>
     </section>
+
+    <!-- نافذة واجهة تسجيل الدخول المنبثقة -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="login-modal">
+            <button class="close-modal-btn" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h3>تسجيل <span>الدخول السريع</span></h3>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>الاسم الكامل أو اسم المستخدم *</label>
+                    <input type="text" id="loginName" required placeholder="أدخل اسمك الكريم">
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف للتأكيد *</label>
+                    <input type="tel" id="loginPhone" required placeholder="05xxxxxxxx">
+                </div>
+                <button type="submit" class="submit-login-btn">دخول إلى النظام</button>
+            </form>
+        </div>
+    </div>
 
     <footer>
         <p>جميع الحقوق محفوظة &copy; 2026 Des Program | Code • Create • Solve</p>
@@ -95,6 +139,63 @@
             } else {
                 header.classList.remove('scrolled');
             }
+        });
+
+        // إدارة واجهة تسجيل الدخول المنبثقة
+        const loginModal = document.getElementById('loginModal');
+        const navLoginBtn = document.getElementById('navLoginBtn');
+
+        function openLoginModal() {
+            loginModal.style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            loginModal.style.display = 'none';
+        }
+
+        window.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                closeLoginModal();
+            }
+        });
+
+        // التحقق من حالة تسجيل الدخول مسبقاً وتحديث الزر في الشريط العلوي
+        window.addEventListener('DOMContentLoaded', function() {
+            checkLoginState();
+        });
+
+        function checkLoginState() {
+            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+            const userName = localStorage.getItem("userName");
+            if (isLoggedIn && userName) {
+                navLoginBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${userName}`;
+                navLoginBtn.style.background = "rgba(0, 210, 255, 0.2)";
+                navLoginBtn.onclick = function() {
+                    if(confirm("أنت مسجل الدخول بالفعل باسم: " + userName + "\nهل تريد تسجيل الخروج؟")) {
+                        localStorage.removeItem("isLoggedIn");
+                        localStorage.removeItem("userName");
+                        localStorage.removeItem("userPhone");
+                        alert("تم تسجيل الخروج بنجاح.");
+                        location.reload();
+                    }
+                };
+            }
+        }
+
+        // معالجة إرسال نموذج تسجيل الدخول السريع
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nameVal = document.getElementById('loginName').value;
+            const phoneVal = document.getElementById('loginPhone').value;
+
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userName", nameVal);
+            localStorage.setItem("userPhone", phoneVal);
+
+            alert("مرحباً بك " + nameVal + "! تم تسجيل دخولك بنجاح.");
+            closeLoginModal();
+            checkLoginState();
         });
     </script>
 </body>
