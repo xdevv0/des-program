@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Des Program - المنتجات ونموذج الطلب الذكي</title>
+    <title>Des Program - المنتجات، الطلب، وحسابي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -78,9 +78,16 @@
         .price-list li span { color: #fff; font-weight: 700; }
         .note { font-size: 0.8rem; color: #ff007f; margin-bottom: 15px; background: rgba(255,0,127,0.1); padding: 6px; border-radius: 6px; text-align: center; }
 
-        /* زر الطلب الموجود تحت كل بطاقة */
         .card-order-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 15px; text-align: center; box-shadow: 0 0 15px rgba(157, 78, 221, 0.3); }
         .card-order-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* أزرار التواصل السريع للمواقع الإلكترونية */
+        .quick-contact-container { display: flex; gap: 10px; margin-top: 15px; }
+        .quick-btn { flex: 1; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; color: #fff; }
+        .whatsapp-btn { background-color: #25d366; box-shadow: 0 0 15px rgba(37, 211, 102, 0.3); }
+        .whatsapp-btn:hover { background-color: #1ebe57; transform: translateY(-2px); }
+        .insta-btn { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); box-shadow: 0 0 15px rgba(220, 39, 67, 0.3); }
+        .insta-btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
         /* مودال (نافذة منبثقة) نموذج الطلب */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
@@ -111,6 +118,14 @@
         .submit-order-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); }
         .submit-order-btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
+        /* واجهة حسابي */
+        .dashboard-container { display: none; padding: 130px 5% 80px; max-width: 1000px; margin: 0 auto; direction: rtl; }
+        .dashboard-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px; margin-bottom: 25px; }
+        .dashboard-card h3 { color: var(--primary-blue); margin-bottom: 15px; font-size: 1.4rem; }
+        .user-info-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; }
+        .user-info-row span { color: var(--text-muted); }
+        .user-info-row strong { color: #fff; }
+
         footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; margin-top: 50px; background: var(--bg-color); }
         @media(max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .form-group.full-width { grid-column: span 1; } }
     </style>
@@ -123,18 +138,18 @@
         </div>
         <nav>
             <ul>
-                <li><a href="index.html">الرئيسية</a></li>
-                <li><a href="products.html" class="active">المنتجات والطلب</a></li>
+                <li><a href="#" onclick="showSection('products')">الرئيسية والمنتجات</a></li>
+                <li><a href="#" onclick="showSection('dashboard')" id="navAccountBtn">حسابي</a></li>
                 <li><a href="services.html">خدماتنا</a></li>
-                <li><a href="about.html">من نحن</a></li>
                 <li><a href="contact.html">تواصل معنا</a></li>
             </ul>
         </nav>
     </header>
 
-    <div class="products-container">
-        <h2 class="section-title">قائمة المنتجات <span>والأسعار الرسمية</span></h2>
-        <p class="section-subtitle">اختر منتجك الذكي واضغط على زر الطلب لإتمام العملية</p>
+    <!-- قسم المنتجات -->
+    <div class="products-container" id="productsSection">
+        <h2 class="section-title">قائمة المنتجات <span>والخدمات الذكية</span></h2>
+        <p class="section-subtitle">اختر منتجك أو خدمتك البرمجية وابدأ طلبك الآن</p>
 
         <div class="products-grid">
             <!-- بطاقة NFC -->
@@ -148,7 +163,7 @@
                         <h3 class="product-title">بطاقة NFC الذكية</h3>
                         <ul class="price-list">
                             <li>موقع الويب من الزبون: <span>50 شيكل</span></li>
-                            <li>شامل البرمجة وربط NFC (من طرفنا): <span>100 شيكل</span></li>
+                            <li>شامل البرمجة وربط NFC: <span>100 شيكل</span></li>
                         </ul>
                     </div>
                     <button class="card-order-btn" onclick="openOrderModal('بطاقة NFC')">اطلب الآن</button>
@@ -166,9 +181,9 @@
                         <h3 class="product-title">درع CNC بتقنية NFC</h3>
                         <ul class="price-list">
                             <li>موقع الويب من الزبون: <span>80 شيكل</span></li>
-                            <li>شامل البرمجة وربط NFC (من طرفنا): <span>140 شيكل</span></li>
+                            <li>شامل البرمجة وربط NFC: <span>140 شيكل</span></li>
                         </ul>
-                        <div class="note">ملاحظة رسمية: للكميات السعر يختلف (خاص لأصحاب المصالح)</div>
+                        <div class="note">ملاحظة: للكميات أسعار خاصة لأصحاب المصالح</div>
                     </div>
                     <button class="card-order-btn" onclick="openOrderModal('درع CNC NFC')">اطلب الآن</button>
                 </div>
@@ -185,10 +200,36 @@
                         <h3 class="product-title">درع أكريليك NFC</h3>
                         <ul class="price-list">
                             <li>موقع الويب من الزبون: <span>100 شيكل</span></li>
-                            <li>شامل البرمجة وربط NFC (من طرفنا): <span>160 شيكل</span></li>
+                            <li>شامل البرمجة وربط NFC: <span>160 شيكل</span></li>
                         </ul>
                     </div>
                     <button class="card-order-btn" onclick="openOrderModal('درع أكريليك NFC')">اطلب الآن</button>
+                </div>
+            </div>
+
+            <!-- المنتج الجديد: بناء موقع إلكتروني -->
+            <div class="product-card" style="border-color: var(--primary-blue);">
+                <div class="product-img-container">
+                    <img src="https://via.placeholder.com/400x300?text=Web+Development" alt="بناء موقع إلكتروني">
+                    <img src="descard.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
+                </div>
+                <div class="product-content">
+                    <div>
+                        <h3 class="product-title">بناء موقع إلكتروني متكامل</h3>
+                        <ul class="price-list">
+                            <li>نوع الخدمة: <span>حسب طلب ومواصفات الزبون</span></li>
+                            <li>التسعير: <span>حسب المتطلبات (يتم التفاوض)</span></li>
+                        </ul>
+                        <div class="note" style="color: var(--primary-blue); background: rgba(0, 210, 255, 0.1);">اختر إحدى وسيلتي التواصل أدناه لتزويدنا بكافة التفاصيل والمعلومات:</div>
+                    </div>
+                    <div class="quick-contact-container">
+                        <a href="https://wa.me/972590000000?text=مرحباً، أرغب بالاستفسار عن بناء موقع إلكتروني متكامل لمشروعي..." target="_blank" class="quick-btn whatsapp-btn">
+                            <i class="fa-brands fa-whatsapp"></i> واتساب
+                        </a>
+                        <a href="https://instagram.com/direct/t/desprogram" target="_blank" class="quick-btn insta-btn">
+                            <i class="fa-brands fa-instagram"></i> انستغرام
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -215,7 +256,7 @@
                             <select id="deliveryMethod" required>
                                 <option value="" disabled selected>-- اختر الطريقة المناسبة --</option>
                                 <option value="توصيل">توصيل</option>
-                                <option value="استلام شخصي">استلام شخصي (من نقطة الاستلام المجانية - قلقيلية - بيتل سويت - شارع الاستخبارات العسكرية)</option>
+                                <option value="استلام شخصي">استلام شخصي (من نقطة الاستلام - قلقيلية)</option>
                             </select>
                         </div>
 
@@ -242,6 +283,7 @@
                                     <option value="درع CNC NFC - برمجة من طرفنا (140 شيكل)">درع CNC NFC - برمجة وربط من طرفنا (140 شيكل)</option>
                                     <option value="درع أكريليك NFC - موقع من الزبون (100 شيكل)">درع أكريليك NFC - موقع الويب من الزبون (100 شيكل)</option>
                                     <option value="درع أكريليك NFC - برمجة من طرفنا (160 شيكل)">درع أكريليك NFC - برمجة وربط من طرفنا (160 شيكل)</option>
+                                    <option value="بناء موقع إلكتروني متكامل">بناء موقع إلكتروني متكامل (حسب الطلب)</option>
                                 </select>
                                 <button type="button" id="clearProductBtn" class="clear-select-btn" title="إلغاء التحديد"><i class="fa-solid fa-xmark"></i></button>
                             </div>
@@ -251,15 +293,11 @@
                         <div class="form-group">
                             <label>الكمية / العدد المطلوب *</label>
                             <select id="orderQuantity" required>
-                                <option value="1" selected>1 قطعة</option>
+                                <option value="1" selected>1 قطعة / مشروع</option>
                                 <option value="2">2 قطع</option>
                                 <option value="3">3 قطع</option>
-                                <option value="4">4 قطع</option>
                                 <option value="5">5 قطع</option>
                                 <option value="10">10 قطع</option>
-                                <option value="20">20 قطع</option>
-                                <option value="50">50 قطعة (سعر خاص)</option>
-                                <option value="100">100 قطعة (سعر خاص)</option>
                             </select>
                         </div>
 
@@ -267,7 +305,7 @@
                             <!-- صندوق تفاصيل التصميم -->
                             <div id="designDetailsBox" class="dynamic-field">
                                 <label style="color: var(--primary-blue);"><i class="fa-solid fa-pen-nib"></i> اشرح لنا تفاصيل التصميم والمحتوى المطلوب بدقة:</label>
-                                <textarea id="clientDesignDetails" rows="3" placeholder="اكتب الألوان، الروابط، النصوص، أو الفكرة التي تريدها أن تظهر في موقعك المصمم من طرفنا..."></textarea>
+                                <textarea id="clientDesignDetails" rows="3" placeholder="اكتب الألوان، الروابط، النصوص، أو الفكرة..."></textarea>
                             </div>
 
                             <!-- صندوق رابط الموقع -->
@@ -279,6 +317,35 @@
                     </div>
                     <button type="submit" class="submit-order-btn">إرسال الطلب رسمياً</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- واجهة حسابي (Account Dashboard) -->
+    <div class="dashboard-container" id="dashboardSection">
+        <h2 class="section-title">لوحة تحكم <span>حسابي</span></h2>
+        <p class="section-subtitle">إدارة معلومات حسابك ومتابعة طلباتك السابقة</p>
+
+        <div class="dashboard-card">
+            <h3><i class="fa-solid fa-user-circle"></i> معلومات الحساب الشخصي</h3>
+            <div class="user-info-row">
+                <span>اسم المستخدم المسجل:</span>
+                <strong id="userNameDisplay">غير متوفر</strong>
+            </div>
+            <div class="user-info-row">
+                <span>البريد الإلكتروني / الهاتف:</span>
+                <strong id="userEmailDisplay">غير متوفر</strong>
+            </div>
+            <div class="user-info-row">
+                <span>حالة الحساب:</span>
+                <strong style="color: #25d366;">نشط ومصرح له بالطلب</strong>
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <h3><i class="fa-solid fa-box-archive"></i> طلباتي السابقة</h3>
+            <div id="userOrdersList" style="color: var(--text-muted); font-size: 0.95rem;">
+                جاري جلب الطلبات السابقة...
             </div>
         </div>
     </div>
@@ -297,11 +364,31 @@
             }
         });
 
+        // التنقل بين الأقسام (المنتجات وحسابي)
+        function showSection(sectionName) {
+            const productsSec = document.getElementById('productsSection');
+            const dashboardSec = document.getElementById('dashboardSection');
+            
+            if (sectionName === 'dashboard') {
+                const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+                if (!isLoggedIn) {
+                    alert("عذراً، يجب تسجيل الدخول أولاً لعرض صفحة حسابي.");
+                    window.location.href = "login.html";
+                    return;
+                }
+                productsSec.style.display = 'none';
+                dashboardSec.style.display = 'block';
+                loadUserData();
+            } else {
+                dashboardSec.style.display = 'none';
+                productsSec.style.display = 'block';
+            }
+        }
+
         // دوال فتح وإغلاق النافذة المنبثقة للطلب
         const orderModal = document.getElementById('orderModal');
         function openOrderModal(productName) {
             orderModal.style.display = 'flex';
-            // تحديد المنتج بشكل تلقائي في القائمة بناءً على البطاقة إذا رغبت، أو تركه للمستخدم
             if(productName) {
                 const selectElement = document.getElementById('productChoice');
                 for (let i = 0; i < selectElement.options.length; i++) {
@@ -318,14 +405,12 @@
             orderModal.style.display = 'none';
         }
 
-        // إغلاق المودال عند النقر خارج الصندوق
         window.addEventListener('click', function(e) {
             if (e.target === orderModal) {
                 closeOrderModal();
             }
         });
 
-        // التحكم في إظهار وإخفاء حقول العنوان حسب طريقة الاستلام/التوصيل
         const deliveryMethod = document.getElementById('deliveryMethod');
         const cityGroup = document.getElementById('cityGroup');
         const addressGroup = document.getElementById('addressGroup');
@@ -377,7 +462,6 @@
 
         productChoice.addEventListener('change', updateProductFields);
 
-        // زر إغلاق وتصفير قائمة المنتجات (X)
         clearProductBtn.addEventListener('click', function() {
             productChoice.selectedIndex = 0;
             updateProductFields();
@@ -394,11 +478,44 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // تحميل بيانات المستخدم في واجهة حسابي
+        function loadUserData() {
+            const userName = localStorage.getItem("userName") || "العميل الكريم";
+            const userEmail = localStorage.getItem("userEmail") || "غير متوفر";
+            
+            document.getElementById('userNameDisplay').innerText = userName;
+            document.getElementById('userEmailDisplay').innerText = userEmail;
+
+            // جلب طلبات العميل من Firestore بناءً على اسم أو رقم المستخدم
+            const ordersListContainer = document.getElementById('userOrdersList');
+            db.collection("orders").where("clientName", "==", userName).get()
+            .then((querySnapshot) => {
+                if (querySnapshot.empty) {
+                    ordersListContainer.innerHTML = "لا توجد طلبات سابقة مسجلة باسمك حتى الآن.";
+                    return;
+                }
+                let htmlContent = "";
+                querySnapshot.forEach((doc) => {
+                    let data = doc.data();
+                    htmlContent += `
+                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; margin-bottom: 10px; border-right: 3px solid var(--primary-blue);">
+                            <strong>المنتج:</strong> ${data.selectedProduct} <br>
+                            <strong>الكمية:</strong> ${data.quantity} | <strong>طريقة الاستلام:</strong> ${data.deliveryMethod}
+                        </div>
+                    `;
+                });
+                ordersListContainer.innerHTML = htmlContent;
+            })
+            .catch((error) => {
+                console.error("خطأ في جلب الطلبات:", error);
+                ordersListContainer.innerHTML = "حدث خطأ أثناء تحميل الطلبات.";
+            });
+        }
+
         const orderForm = document.getElementById('orderForm');
         orderForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // التحقق مما إذا كان المستخدم مسجلاً للدخول عند محاولة إرسال الطلب
             const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
             if (!isLoggedIn) {
                 alert("عذراً، يجب تسجيل الدخول أو إنشاء حساب لإتمام وإرسال الطلب رسمياً.");
@@ -409,9 +526,13 @@
             let selectedProductText = productChoice.value;
             let quantityValue = parseInt(document.getElementById('orderQuantity').value);
             let selectedMethod = deliveryMethod.value;
+            let clientNameVal = document.getElementById('clientName').value;
+
+            // تخزين اسم المستخدم محلياً لربطه بصفحة حسابي
+            localStorage.setItem("userName", clientNameVal);
 
             let orderData = {
-                clientName: document.getElementById('clientName').value,
+                clientName: clientNameVal,
                 clientPhone: document.getElementById('clientPhone').value,
                 deliveryMethod: selectedMethod,
                 selectedProduct: selectedProductText,
@@ -438,7 +559,7 @@
                 db.collection("admin_notifications").add({
                     type: "new_order",
                     title: "طلبية جديدة",
-                    message: `طلب العميل (${orderData.clientName}) عدد (${quantityValue}) قطعة عبر (${selectedMethod}).`,
+                    message: `طلب العميل (${clientNameVal}) عدد (${quantityValue}) قطعة عبر (${selectedMethod}).`,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     read: false
                 });
