@@ -191,10 +191,10 @@
                 </div>
             </div>
 
-            <!-- بناء موقع إلكتروني -->
+            <!-- بناء موقع إلكتروني (تم تحديث الصورة بـ webdes.png مع ضمان ظهورها كاملة ومدروسة) -->
             <div class="product-card" style="border-color: var(--primary-blue);">
                 <div class="product-img-container">
-                    <img src="https://via.placeholder.com/400x300?text=Web+Development" alt="بناء موقع إلكتروني">
+                    <img src="webdes.png" alt="بناء موقع إلكتروني" onerror="this.src='https://via.placeholder.com/400x300?text=Web+Development'">
                     <img src="descard.jpg" alt="Logo" class="watermark-logo" onerror="this.style.display='none'">
                 </div>
                 <div class="product-content">
@@ -204,15 +204,19 @@
                             <li>نوع الخدمة: <span>حسب طلب ومواصفات الزبون</span></li>
                             <li>التسعير: <span>حسب المتطلبات (يتم التفاوض)</span></li>
                         </ul>
-                        <div class="note" style="color: var(--primary-blue); background: rgba(0, 210, 255, 0.1);">تواصل معنا لتزويدنا بكافة تفاصيل مشروعك البرمجي:</div>
+                        <div class="note" style="color: var(--primary-blue); background: rgba(0, 210, 255, 0.1);">تواصل معنا أو اطلب الخدمة لنقاش تفاصيل مشروعك:</div>
                     </div>
-                    <div class="quick-contact-container">
-                        <a href="https://wa.me/972566027617?text=مرحباً، أرغب بالاستفسار عن بناء موقع إلكتروني متكامل لمشروعي..." target="_blank" class="quick-btn whatsapp-btn">
-                            <i class="fa-brands fa-whatsapp"></i> واتساب
-                        </a>
-                        <a href="https://www.instagram.com/des_program?igsi=YXc0emN3bW9qc3M1" target="_blank" class="quick-btn insta-btn">
-                            <i class="fa-brands fa-instagram"></i> انستغرام
-                        </a>
+                    
+                    <div style="display: flex; gap: 8px; flex-direction: column;">
+                        <button class="card-order-btn" onclick="openOrderModal('بناء موقع إلكتروني متكامل')"><i class="fa-solid fa-cart-shopping"></i> اطلب الخدمة رسمياً</button>
+                        <div class="quick-contact-container" style="margin-top: 0;">
+                            <a href="https://wa.me/972566027617?text=مرحباً، أرغب بالاستفسار عن بناء موقع إلكتروني متكامل لمشروعي..." target="_blank" class="quick-btn whatsapp-btn">
+                                <i class="fa-brands fa-whatsapp"></i> واتساب
+                            </a>
+                            <a href="https://www.instagram.com/des_program?igsi=YXc0emN3bW9qc3M1" target="_blank" class="quick-btn insta-btn">
+                                <i class="fa-brands fa-instagram"></i> انستغرام
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -370,6 +374,10 @@
                 } else if (selectedVal.includes('موقع من الزبون')) {
                     websiteLinkBox.style.display = 'block';
                     document.getElementById('clientWebsiteLink').setAttribute('required', 'true');
+                } else if (selectedVal.includes('بناء موقع إلكتروني متكامل')) {
+                    designDetailsBox.style.display = 'block';
+                    document.getElementById('clientDesignDetails').setAttribute('placeholder', 'اكتب متطلبات موقعك، أفكارك، والخدمات المرغوبة فيه...');
+                    document.getElementById('clientDesignDetails').setAttribute('required', 'true');
                 }
             } else {
                 clearProductBtn.style.display = 'none';
