@@ -6,6 +6,14 @@
     <title>Des Program - ماذا نقدم وفكرة المشروع</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- كود حماية الصفحة والتحقق من تسجيل الدخول -->
+    <script>
+        if (localStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "login.html";
+        }
+    </script>
+
     <style>
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
@@ -86,7 +94,7 @@
         <div class="about-content">
             <h3><i class="fa-solid fa-lightbulb"></i> فكرة مشروعنا الفريدة</h3>
             <p>تقوم فكرة <strong>Des Program</strong> على دمج العالم الرقمي بالواقع المادي بطريقة ذكية وسلسة. نحن لا نقتصر على تقديم بطاقات ودروع تقليدية، بل نصنع <strong>منظومة ربط متكاملة</strong>؛ حيث نقوم ببرمجة وتصميم مواقع إلكترونية متكاملة للزبائن، ومن ثم ربطها تقنياً بشرائح وقصات <strong>NFC</strong> المدمجة داخل بطاقات الأعمال أو الدروع المكتبية (CNC وأكريليك).</p>
-            <p>بمجرد تمرير الهاتف الذكي على الدرع أو البطاقة، يتم فتح موقع العاهل/الشركة الإلكتروني فوراً على هاتف الزملاء أو العابثين بلا حاجة لتطبيقات معقدة، مما يمنح الشركات والمصالح التجارية هوية رقمية معاصرة وسريعة للغاية.</p>
+            <p>بمجرد تمرير الهاتف الذكي على الدرع أو البطاقة، يتم فتح موقع الشركة الإلكتروني فوراً على الهاتف بلا حاجة لتطبيقات معقدة، مما يمنح الشركات والمصالح التجارية هوية رقمية معاصرة وسريعة للغاية.</p>
 
             <h3><i class="fa-solid fa-boxes-stacked"></i> ماذا نقدم في Des Program؟</h3>
             <p><strong>1. برمجة وتصميم مواقع الويب:</strong> نبني مواقع إلكترونية احترافية مخصصة للشركات، الأفراد، وأصحاب المصالح، بتصميمات عصرية وسرعة فائقة.</p>
