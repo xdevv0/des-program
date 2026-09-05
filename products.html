@@ -194,14 +194,29 @@
                         <label>رقم الهاتف *</label>
                         <input type="tel" id="clientPhone" required placeholder="05xxxxxxxx">
                     </div>
+
+                    <!-- قسم اختيار طريقة الاستلام أو التوصيل -->
                     <div class="form-group">
-                        <label>العنوان التفصيلي *</label>
-                        <input type="text" id="clientAddress" required placeholder="الشارع، اسم المبنى، رقم الطابق">
+                        <label>طريقة الاستلام / التوصيل *</label>
+                        <select id="deliveryMethod" required>
+                            <option value="" disabled selected>-- اختر الطريقة المناسبة --</option>
+                            <option value="توصيل">توصيل دليفري إلى العنوان</option>
+                            <option value="استلام شخصي">استلام شخصي (من المقر)</option>
+                        </select>
                     </div>
-                    <div class="form-group">
+
+                    <!-- المدينة تظهر فقط في حال اختيار التوصيل -->
+                    <div class="form-group" id="cityGroup">
                         <label>المدينة | المنطقة *</label>
-                        <input type="text" id="clientCity" required placeholder="مثال: رام الله / نابلس">
+                        <input type="text" id="clientCity" placeholder="مثال: رام الله / نابلس">
                     </div>
+
+                    <!-- العنوان التفصيلي يظهر فقط في حال اختيار التوصيل -->
+                    <div class="form-group full-width" id="addressGroup">
+                        <label>العنوان التفصيلي للتوصيل *</label>
+                        <input type="text" id="clientAddress" placeholder="الشارع، اسم المبنى، رقم الطابق">
+                    </div>
+
                     <div class="form-group">
                         <label>المنتج والمواصفات المختارة *</label>
                         <select id="productChoice" required>
@@ -264,6 +279,29 @@
             }
         });
 
+        // التحكم في إظهار وإخفاء حقول العنوان حسب طريقة الاستلام/التوصيل
+        const deliveryMethod = document.getElementById('deliveryMethod');
+        const cityGroup = document.getElementById('cityGroup');
+        const addressGroup = document.getElementById('addressGroup');
+        const clientCity = document.getElementById('clientCity');
+        const clientAddress = document.getElementById('clientAddress');
+
+        deliveryMethod.addEventListener('change', function() {
+            if (this.value === 'توصيل') {
+                cityGroup.style.display = 'block';
+                addressGroup.style.display = 'block';
+                clientCity.setAttribute('required', 'true');
+                clientAddress.setAttribute('required', 'true');
+            } else {
+                cityGroup.style.display = 'none';
+                addressGroup.style.display = 'none';
+                clientCity.removeAttribute('required');
+                clientAddress.removeAttribute('required');
+                clientCity.value = '';
+                clientAddress.value = '';
+            }
+        });
+
         const productChoice = document.getElementById('productChoice');
         const designDetailsBox = document.getElementById('designDetailsBox');
         const websiteLinkBox = document.getElementById('websiteLinkBox');
@@ -301,19 +339,26 @@
             e.preventDefault();
             
             let selectedProductText = productChoice.value;
-            let quantity = document.getElementById('orderQuantity').value;
-
-            // دمج المنتج مع الكمية ليظهر واضحاً في لوحة التحكم
-            let finalProductString = `${selectedProductText} (الكمية: ${quantity})`;
+            let quantityValue = parseInt(document.getElementById('orderQuantity').value);
+            let selectedMethod = deliveryMethod.value;
 
             let orderData = {
                 clientName: document.getElementById('clientName').value,
                 clientPhone: document.getElementById('clientPhone').value,
-                clientAddress: document.getElementById('clientAddress').value,
-                clientCity: document.getElementById('clientCity').value,
-                selectedProduct: finalProductString,
+                deliveryMethod: selectedMethod,
+                selectedProduct: selectedProductText,
+                quantity: quantityValue,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
+
+            // إضافة تفاصيل العنوان فقط إذا اختار التوصيل
+            if (selectedMethod === 'توصيل') {
+                orderData.clientCity = clientCity.value;
+                orderData.clientAddress = clientAddress.value;
+            } else {
+                orderData.clientCity = "استلام شخصي من المقر";
+                orderData.clientAddress = "استلام شخصي من المقر";
+            }
 
             if (selectedProductText.includes('برمجة من طرفنا')) {
                 orderData.designDetails = document.getElementById('clientDesignDetails').value;
@@ -327,7 +372,7 @@
                 db.collection("admin_notifications").add({
                     type: "new_order",
                     title: "طلبية جديدة",
-                    message: `طلب العميل (${orderData.clientName}) عدد (${quantity}) من المنتج المحدد.`,
+                    message: `طلب العميل (${orderData.clientName}) عدد (${quantityValue}) قطعة عبر (${selectedMethod}).`,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     read: false
                 });
@@ -336,6 +381,8 @@
                 orderForm.reset();
                 designDetailsBox.style.display = 'none';
                 websiteLinkBox.style.display = 'none';
+                cityGroup.style.display = 'block';
+                addressGroup.style.display = 'block';
             })
             .catch((error) => {
                 console.error("خطأ:", error);
