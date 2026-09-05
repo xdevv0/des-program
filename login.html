@@ -46,6 +46,8 @@
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         
+        .whatsapp-btn { background: #25d366; color: #fff; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
         .otp-section { display: none; margin-top: 15px; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
@@ -97,12 +99,14 @@
                 <input type="checkbox" id="rememberMe"> تذكرني على هذا الجهاز
             </label>
 
-            <button type="button" id="sendOtpBtn" class="btn">إرسال كود التحقق (OTP)</button>
+            <button type="button" id="sendOtpBtn" class="btn whatsapp-btn">
+                <i class="fa-brands fa-whatsapp"></i> الحصول على كود التحقق (OTP) عبر واتساب
+            </button>
 
             <!-- قسم إدخال كود التحقق بالمربعات المنفصلة -->
             <div id="otpBox" class="otp-section">
                 <div class="form-group">
-                    <label style="color: var(--primary-blue); text-align: right; margin-bottom: 10px;">أدخل كود التحقق المكون من 4 أرقام</label>
+                    <label style="color: var(--primary-blue); text-align: right; margin-bottom: 10px;">أدخل كود التحقق المكون من 4 أرقام الذي ظهر لك في الواتساب:</label>
                     <div class="otp-inputs-container">
                         <input type="text" class="otp-box" maxlength="1" data-index="1">
                         <input type="text" class="otp-box" maxlength="1" data-index="2">
@@ -134,6 +138,9 @@
 
         let generatedOtp = "";
         let countdownInterval;
+
+        // رقم واتساب المؤسسة المحدث
+        const institutionWhatsApp = "972566027617";
 
         const phoneField = document.getElementById('phoneInput');
         phoneField.addEventListener('input', function() {
@@ -220,6 +227,7 @@
 
             if (phoneVal.length !== 9) {
                 errorMsg.style.display = 'block';
+                phoneField.focus();
                 return;
             }
             errorMsg.style.display = 'none';
@@ -227,13 +235,18 @@
             const fullPhone = "+970" + phoneVal;
             generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
             
-            alert("تم إرسال كود التحقق بنجاح إلى الرقم: " + fullPhone + " \n(للتجربة، الكود هو: " + generatedOtp + ")");
+            // فتح واتساب بشكل مباشر لإرسال الكود الخاص بالمستخدم
+            let message = `مرحباً، أود تسجيل الدخول إلى موقع Des Program برقم الجوال: ${fullPhone}. رمز التحقق الخاص بي هو: *${generatedOtp}*`;
+            let whatsappUrl = `https://wa.me/${institutionWhatsApp}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank');
 
             document.getElementById('otpBox').style.display = 'block';
             document.getElementById('sendOtpBtn').style.display = 'none';
             otpBoxes[0].focus();
             
             startTimer();
+            alert("تم توليد رمز التحقق! انقله من الواتساب الذي سينفتح أمامك واكتبه في مربعات التحقق أدناه.");
         }
 
         document.getElementById('sendOtpBtn').addEventListener('click', sendOtpProcess);
@@ -253,7 +266,6 @@
                 return;
             }
 
-            // تم إزالة عداد الحظر، وبإمكان المستخدم المحاولة بلا توقف
             if (enteredOtp !== generatedOtp) {
                 otpErrorMsg.innerText = "كود التحقق غير صحيح! يرجى المحاولة مرة أخرى.";
                 otpErrorMsg.style.display = 'block';
