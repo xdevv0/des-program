@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Des Program - تسجيل الدخول الإلزامي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- مكتبة Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <style>
+        :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .login-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; width: 100%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .logo-area { text-align: center; margin-bottom: 30px; }
+        .logo-area h1 { font-size: 1.8rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+        .logo-area p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 500; font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; text-align: left; direction: ltr; }
+        .form-group input[type="text"] { text-align: right; direction: rtl; }
+        .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+
+        .btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 14px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        
+        .otp-section { display: none; margin-top: 15px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .error-msg { color: #ff007f; font-size: 0.85rem; margin-top: 5px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="logo-area">
+            <h1>Des Program</h1>
+            <p>تسجيل الدخول الإلزامي برقم فلسطيني (+970)</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>الاسم الكامل</label>
+                <input type="text" id="userName" required placeholder="أدخل اسمك الكريم">
+            </div>
+
+            <div class="form-group">
+                <label>رقم الجوال (فلسطيني حصراً)</label>
+                <input type="text" id="phoneInput" required placeholder="+97059xxxxxxx أو +97056xxxxxxx">
+                <span id="phoneError" class="error-msg" style="display:none;">يجب أن يبدأ الرقم بـ +970 ويتكون من 13 خانة صحيحة!</span>
+            </div>
+
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" id="passwordInput" required placeholder="••••••••">
+            </div>
+
+            <button type="button" id="sendOtpBtn" class="btn">إرسال كود التحقق (OTP)</button>
+
+            <!-- قسم إدخال كود التحقق -->
+            <div id="otpBox" class="otp-section">
+                <div class="form-group">
+                    <label style="color: var(--primary-blue);">أدخل كود التحقق المكون من 4 أرقام</label>
+                    <input type="text" id="otpInput" maxlength="4" placeholder="1234" style="text-align: center; letter-spacing: 5px; font-weight: bold;">
+                </div>
+                <button type="submit" class="btn">تأكيد الدخول للموقع</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // إعدادات فايربيس الخاصة بك
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForDesProgram...",
+            authDomain: "desprogram-89c6a.firebaseapp.com",
+            projectId: "desprogram-89c6a",
+            storageBucket: "desprogram-89c6a.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:1234:web:1234"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let generatedOtp = "";
+
+        document.getElementById('sendOtpBtn').addEventListener('click', function() {
+            const phone = document.getElementById('phoneInput').value.trim();
+            const errorMsg = document.getElementById('phoneError');
+
+            // التحقق أن الرقم يبدأ بـ +970 وصحيح
+            const palestinianPhoneRegex = /^\+970[2-89]\d{7}$/; // أو صيغة عامة للجوالات الفلسطينية
+            // تحقق مبسط: أن يبدأ بـ +970 ويليها أرقام بطول صحيح
+            if (!phone.startsWith("+970") || phone.length !== 13) {
+                errorMsg.style.display = 'block';
+                return;
+            }
+            errorMsg.style.display = 'none';
+
+            // توليد كود تحقق عشوائي من 4 أرقام
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            alert("تم إرسال كود التحقق بنجاح إلى رقمك. (للتجربة، الكود هو: " + generatedOtp + ")");
+
+            // إظهار حقل إدخال الكود
+            document.getElementById('otpBox').style.display = 'block';
+            this.style.display = 'none';
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const enteredOtp = document.getElementById('otpInput').value.trim();
+            
+            if (enteredOtp !== generatedOtp) {
+                alert("كود التحقق غير صحيح، يرجى المحاولة مجدداً.");
+                return;
+            }
+
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('phoneInput').value;
+            const password = document.getElementById('passwordInput').value;
+
+            // حفظ بيانات الزبون في قاعدة بيانات الأدمن (مجموعة client_logins)
+            db.collection("client_logins").add({
+                name: name,
+                phone: phone,
+                password: password,
+                loginTime: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                // حفظ حالة الدخول في المتصفح المحلي ليتمكن من تصفح باقي الصفحات
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("clientPhone", phone);
+                
+                alert("تم تسجيل الدخول بنجاح! جاري تحويلك للموقع...");
+                window.location.href = "index.html"; // الانتقال للرئيسية
+            }).catch((error) => {
+                console.error("خطأ في حفظ البيانات:", error);
+                alert("حدث خطأ ما، يرجى المحاولة لاحقاً.");
+            });
+        });
+    </script>
+</body>
+</html>
