@@ -16,44 +16,47 @@
             top: 0; 
             left: 0; 
             width: 100%; 
-            background: rgba(5, 5, 8, 0.9); 
+            background: rgba(5, 5, 8, 0.95); 
             backdrop-filter: blur(10px); 
             border-bottom: 1px solid var(--border-color); 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 12px 4%; 
+            padding: 12px 3%; 
             z-index: 1000; 
             animation: headerMove 6s ease-in-out infinite alternate;
         }
 
         @keyframes headerMove {
             0% { transform: translateX(0); }
-            50% { transform: translateX(8px); }
-            100% { transform: translateX(-8px); }
+            50% { transform: translateX(5px); }
+            100% { transform: translateX(-5px); }
         }
 
         .logo-container { display: flex; align-items: center; gap: 8px; }
-        .logo-container img { height: 38px; object-fit: contain; border-radius: 6px; }
-        .logo-text { font-size: 1.05rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
+        .logo-container img { height: 35px; object-fit: contain; border-radius: 6px; }
+        .logo-text { font-size: 1rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        nav ul { display: flex; list-style: none; gap: 12px; }
-        nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: 0.3s; white-space: nowrap; }
+        nav ul { display: flex; list-style: none; gap: 10px; align-items: center; }
+        nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.82rem; transition: 0.3s; white-space: nowrap; }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
         
-        /* التعديل الجذري للشاشات الصغيرة (الموبايل) لعدم التداخل */
-        @media(max-width: 900px) {
-            header { padding: 10px 3%; }
-            .logo-container img { height: 32px; }
-            .logo-text { font-size: 0.95rem; }
-            nav ul { gap: 8px; }
-            nav ul li a { font-size: 0.75rem; }
+        /* التعديلات الدقيقة للشاشات الصغيرة لتناسب الموبايل تماماً بدون تداخل */
+        @media(max-width: 768px) {
+            header { padding: 10px 2%; }
+            .logo-container img { height: 30px; }
+            .logo-text { font-size: 0.85rem; }
+            nav ul { gap: 6px; }
+            nav ul li a { font-size: 0.72rem; }
         }
 
-        @media(max-width: 600px) {
-            header { flex-direction: column; gap: 8px; padding: 8px 2%; }
-            nav ul { gap: 10px; width: 100%; justify-content: center; overflow-x: auto; padding-bottom: 4px; }
-            nav ul li a { font-size: 0.8rem; }
+        @media(max-width: 480px) {
+            header { padding: 8px 10px; }
+            .logo-container { gap: 5px; }
+            .logo-container img { height: 26px; }
+            .logo-text { font-size: 0.75rem; }
+            nav ul { gap: 4px; }
+            nav ul li a { font-size: 0.65rem; }
         }
 
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; background: radial-gradient(circle at center, #121025 0%, var(--bg-color) 70%); }
