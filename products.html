@@ -7,13 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- كود حماية الصفحة والتحقق من تسجيل الدخول -->
-    <script>
-        if (localStorage.getItem("isLoggedIn") !== "true") {
-            window.location.href = "login.html";
-        }
-    </script>
-    
     <!-- مكتبة Firebase v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -85,8 +78,8 @@
         .price-list li span { color: #fff; font-weight: 700; }
         .note { font-size: 0.8rem; color: #ff007f; margin-bottom: 15px; background: rgba(255,0,127,0.1); padding: 6px; border-radius: 6px; text-align: center; }
 
-        /* زر طلب المنتج تحت كل صورة كارد */
-        .card-order-btn { display: block; width: 100%; background: rgba(0, 210, 255, 0.1); border: 1px solid var(--primary-blue); color: var(--primary-blue); text-align: center; padding: 10px; border-radius: 8px; font-weight: 700; text-decoration: none; transition: 0.3s; margin-top: 15px; }
+        /* أزرار الطلب السريع تحت الكارد */
+        .card-order-btn { display: block; width: 100%; background: rgba(0, 210, 255, 0.1); border: 1px solid var(--primary-blue); color: var(--primary-blue); text-align: center; padding: 10px; border-radius: 8px; font-weight: 700; text-decoration: none; transition: 0.3s; margin-top: 10px; }
         .card-order-btn:hover { background: var(--primary-blue); color: #000; box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); }
 
         .order-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; max-width: 800px; margin: 0 auto; scroll-margin-top: 100px; }
@@ -146,9 +139,8 @@
                             <li>شامل البرمجة وربط NFC (من طرفنا): <span>100 شيكل</span></li>
                         </ul>
                     </div>
-                    <!-- أزرار الطلب السريع مع تمرير نوع المنتج للنموذج -->
-                    <a href="#orderSection" class="card-order-btn" onclick="selectProductType('بطاقة NFC - برمجة من طرفنا (100 شيكل)')">طلب المنتج (مع برمجة)</a>
-                    <a href="#orderSection" class="card-order-btn" style="margin-top: 8px; border-color: rgba(255,255,255,0.2); color: #fff;" onclick="selectProductType('بطاقة NFC - موقع من الزبون (50 شيكل)')">طلب المنتج (موقع من الزبون)</a>
+                    <a href="#orderSection" class="card-order-btn" onclick="selectProductType('بطاقة NFC - برمجة من طرفنا (100 شيكل)')">طلب (مع برمجة)</a>
+                    <a href="#orderSection" class="card-order-btn" style="border-color: rgba(255,255,255,0.2); color: #fff;" onclick="selectProductType('بطاقة NFC - موقع من الزبون (50 شيكل)')">طلب (موقع من الزبون)</a>
                 </div>
             </div>
 
@@ -167,8 +159,8 @@
                         </ul>
                         <div class="note">ملاحظة رسمية: للكميات السعر يختلف (خاص لأصحاب المصالح)</div>
                     </div>
-                    <a href="#orderSection" class="card-order-btn" onclick="selectProductType('درع CNC NFC - برمجة من طرفنا (140 شيكل)')">طلب المنتج (مع برمجة)</a>
-                    <a href="#orderSection" class="card-order-btn" style="margin-top: 8px; border-color: rgba(255,255,255,0.2); color: #fff;" onclick="selectProductType('درع CNC NFC - موقع من الزبون (80 شيكل)')">طلب المنتج (موقع من الزبون)</a>
+                    <a href="#orderSection" class="card-order-btn" onclick="selectProductType('درع CNC NFC - برمجة من طرفنا (140 شيكل)')">طلب (مع برمجة)</a>
+                    <a href="#orderSection" class="card-order-btn" style="border-color: rgba(255,255,255,0.2); color: #fff;" onclick="selectProductType('درع CNC NFC - موقع من الزبون (80 شيكل)')">طلب (موقع من الزبون)</a>
                 </div>
             </div>
 
@@ -186,8 +178,8 @@
                             <li>شامل البرمجة وربط NFC (من طرفنا): <span>160 شيكل</span></li>
                         </ul>
                     </div>
-                    <a href="#orderSection" class="card-order-btn" onclick="selectProductType('درع أكريليك NFC - برمجة من طرفنا (160 شيكل)')">طلب المنتج (مع برمجة)</a>
-                    <a href="#orderSection" class="card-order-btn" style="margin-top: 8px; border-color: rgba(255,255,255,0.2); color: #fff;" onclick="selectProductType('درع أكريليك NFC - موقع من الزبون (100 شيكل)')">طلب المنتج (موقع من الزبون)</a>
+                    <a href="#orderSection" class="card-order-btn" onclick="selectProductType('درع أكريليك NFC - برمجة من طرفنا (160 شيكل)')">طلب (مع برمجة)</a>
+                    <a href="#orderSection" class="card-order-btn" style="border-color: rgba(255,255,255,0.2); color: #fff;" onclick="selectProductType('درع أكريليك NFC - موقع من الزبون (100 شيكل)')">طلب (موقع من الزبون)</a>
                 </div>
             </div>
         </div>
@@ -290,12 +282,11 @@
             }
         });
 
-        // دالة اختيار المنتج تلقائياً عند الضغط على زر تحت أي صورة
+        // دالة تحديد المنتج تلقائياً والنزول للنموذج عند الضغط على زر المنتج
         function selectProductType(productName) {
             const productChoice = document.getElementById('productChoice');
             productChoice.value = productName;
             
-            // تشغيل حدث التغيير لفتح الحقول الديناميكية المناسبة (رابط أو تفاصيل تصميم)
             const event = new Event('change');
             productChoice.dispatchEvent(event);
         }
@@ -358,6 +349,14 @@
         const orderForm = document.getElementById('orderForm');
         orderForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // التحقق مما إذا كان المستخدم مسجلاً للدخول عند محاولة إرسال الطلب
+            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+            if (!isLoggedIn) {
+                alert("عذراً، يجب تسجيل الدخول أو إنشاء حساب لإتمام وإرسال الطلب رسمياً.");
+                window.location.href = "login.html";
+                return;
+            }
             
             let selectedProductText = productChoice.value;
             let quantityValue = parseInt(document.getElementById('orderQuantity').value);
