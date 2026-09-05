@@ -202,7 +202,7 @@
                         <label>المدينة | المنطقة *</label>
                         <input type="text" id="clientCity" required placeholder="مثال: رام الله / نابلس">
                     </div>
-                    <div class="form-group full-width">
+                    <div class="form-group">
                         <label>المنتج والمواصفات المختارة *</label>
                         <select id="productChoice" required>
                             <option value="" disabled selected>-- اختر المنتج ونوع الخدمة --</option>
@@ -213,16 +213,34 @@
                             <option value="درع أكريليك NFC - موقع من الزبون (100 شيكل)">درع أكريليك NFC - موقع الويب من الزبون (100 شيكل)</option>
                             <option value="درع أكريليك NFC - برمجة من طرفنا (160 شيكل)">درع أكريليك NFC - برمجة وربط من طرفنا (160 شيكل)</option>
                         </select>
+                    </div>
 
+                    <!-- خيار تحديد الكمية والعدد -->
+                    <div class="form-group">
+                        <label>الكمية / العدد المطلوب *</label>
+                        <select id="orderQuantity" required>
+                            <option value="1" selected>1 قطعة</option>
+                            <option value="2">2 قطع</option>
+                            <option value="3">3 قطع</option>
+                            <option value="4">4 قطع</option>
+                            <option value="5">5 قطع</option>
+                            <option value="10">10 قطع</option>
+                            <option value="20">20 قطع</option>
+                            <option value="50">50 قطعة (سعر خاص)</option>
+                            <option value="100">100 قطعة (سعر خاص)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
                         <!-- صندوق تفاصيل التصميم -->
                         <div id="designDetailsBox" class="dynamic-field">
-                            <label style="margin-top: 15px; color: var(--primary-blue);"><i class="fa-solid fa-pen-nib"></i> اشرح لنا تفاصيل التصميم والمحتوى المطلوب بدقة:</label>
+                            <label style="color: var(--primary-blue);"><i class="fa-solid fa-pen-nib"></i> اشرح لنا تفاصيل التصميم والمحتوى المطلوب بدقة:</label>
                             <textarea id="clientDesignDetails" rows="4" placeholder="اكتب الألوان، الروابط، النصوص، أو الفكرة التي تريدها أن تظهر في موقعك المصمم من طرفنا..."></textarea>
                         </div>
 
                         <!-- صندوق رابط الموقع -->
                         <div id="websiteLinkBox" class="dynamic-field">
-                            <label style="margin-top: 15px; color: #25d366;"><i class="fa-solid fa-link"></i> أضف رابط موقعك الخاص (الذي سيرتبط بـ NFC):</label>
+                            <label style="color: #25d366;"><i class="fa-solid fa-link"></i> أضف رابط موقعك الخاص (الذي سيرتبط بـ NFC):</label>
                             <input type="url" id="clientWebsiteLink" placeholder="https://example.com">
                         </div>
                     </div>
@@ -233,7 +251,7 @@
     </div>
 
     <footer>
-        <p>جميع الحقوق محفوظة &copy; 2026 Des Program | Code • Create • Solve</p>
+        <p>جميع الحقوق محفوظة &copy; 2026 Des Program • Code • Create • Solve</p>
     </footer>
 
     <script>
@@ -282,23 +300,38 @@
         orderForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            let selectedProductText = productChoice.value;
+            let quantity = document.getElementById('orderQuantity').value;
+
+            // دمج المنتج مع الكمية ليظهر واضحاً في لوحة التحكم
+            let finalProductString = `${selectedProductText} (الكمية: ${quantity})`;
+
             let orderData = {
                 clientName: document.getElementById('clientName').value,
                 clientPhone: document.getElementById('clientPhone').value,
                 clientAddress: document.getElementById('clientAddress').value,
                 clientCity: document.getElementById('clientCity').value,
-                selectedProduct: productChoice.value,
+                selectedProduct: finalProductString,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            if (productChoice.value.includes('برمجة من طرفنا')) {
+            if (selectedProductText.includes('برمجة من طرفنا')) {
                 orderData.designDetails = document.getElementById('clientDesignDetails').value;
-            } else if (productChoice.value.includes('موقع من الزبون')) {
+            } else if (selectedProductText.includes('موقع من الزبون')) {
                 orderData.websiteLink = document.getElementById('clientWebsiteLink').value;
             }
 
             db.collection("orders").add(orderData)
             .then(() => {
+                // إرسال إشعار فوري لقسم التنبيهات في لوحة تحكم الأدمن
+                db.collection("admin_notifications").add({
+                    type: "new_order",
+                    title: "طلبية جديدة",
+                    message: `طلب العميل (${orderData.clientName}) عدد (${quantity}) من المنتج المحدد.`,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    read: false
+                });
+
                 alert("تم إرسال طلبك بنجاح وبشكل رسمي! سنتواصل معك في أقرب وقت.");
                 orderForm.reset();
                 designDetailsBox.style.display = 'none';
