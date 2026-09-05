@@ -7,6 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- مكتبة Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <style>
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
@@ -34,7 +38,6 @@
         .logo-container img { height: 32px; max-width: 100%; object-fit: contain; border-radius: 6px; }
         .logo-text { font-size: 0.95rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        /* تصميم الروابط العلوية الموحدة وتضمين حسابي */
         nav ul { display: flex; list-style: none; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
         nav ul li a { 
             color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.75rem; 
@@ -45,39 +48,69 @@
         nav ul li a.account-link:hover { background: rgba(0, 210, 255, 0.15); }
         
         /* زر تسجيل الدخول الاختياري */
-        .login-nav-btn { color: #fff !important; background: linear-gradient(135deg, rgba(0, 210, 255, 0.15) 0%, rgba(157, 78, 221, 0.15) 100%); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: 700 !important; transition: 0.3s; }
+        .login-nav-btn { color: #fff !important; background: linear-gradient(135deg, rgba(0, 210, 255, 0.15) 0%, rgba(157, 78, 221, 0.15) 100%); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: 700 !important; transition: 0.3s; display: flex; align-items: center; gap: 4px; font-size: 0.75rem; }
         .login-nav-btn:hover { background: var(--accent-gradient); border-color: transparent; box-shadow: 0 0 10px rgba(0, 210, 255, 0.4); }
 
         @media(max-width: 768px) {
             header { justify-content: center; padding: 8px 2%; }
             nav ul { gap: 8px; }
-            nav ul li a { font-size: 0.7rem; }
+            nav ul li a, .login-nav-btn { font-size: 0.7rem; }
         }
 
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; background: radial-gradient(circle at center, #121025 0%, var(--bg-color) 70%); }
         .hero h1 { font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p { font-size: 1.05rem; color: var(--text-muted); max-width: 650px; margin-bottom: 30px; line-height: 1.6; }
-        .btn { background: var(--accent-gradient); color: #fff; padding: 10px 30px; border-radius: 30px; text-decoration: none; font-weight: 700; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); transition: 0.3s; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0, 210, 255, 0.7); }
+        .btn-hero { background: var(--accent-gradient); color: #fff; padding: 10px 30px; border-radius: 30px; text-decoration: none; font-weight: 700; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); transition: 0.3s; }
+        .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0, 210, 255, 0.7); }
         
-        /* واجهة مودال تسجيل الدخول */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .login-modal { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 30px; width: 100%; max-width: 400px; position: relative; animation: modalPopup 0.3s ease; }
+        /* تصميم نافذة المودال لتسجيل الدخول */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px; overflow-y: auto; }
+        .login-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; width: 100%; max-width: 440px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative; animation: modalPopup 0.3s ease; max-height: 90vh; overflow-y: auto; }
         @keyframes modalPopup { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
-        .close-modal-btn { position: absolute; top: 15px; left: 15px; background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; transition: 0.3s; }
+        .close-modal-btn { position: absolute; top: 15px; left: 15px; background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; transition: 0.3s; }
         .close-modal-btn:hover { color: #ff007f; }
 
-        .login-modal h3 { font-size: 1.4rem; text-align: center; margin-bottom: 20px; color: #fff; }
-        .login-modal h3 span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .form-group { margin-bottom: 15px; }
+        .logo-area { text-align: center; margin-bottom: 20px; }
+        .logo-area h1 { font-size: 1.6rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
+        .logo-area p { color: var(--text-muted); font-size: 0.85rem; margin-top: 5px; }
+
+        .form-group { margin-bottom: 15px; position: relative; }
         .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 500; font-size: 0.85rem; }
-        .form-group input { width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .form-group input { width: 100%; padding: 11px 14px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
         .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+
+        .phone-input-wrapper { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: 0.3s; direction: ltr; }
+        .phone-input-wrapper:focus-within { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+        .phone-prefix { background: rgba(255, 255, 255, 0.05); color: var(--primary-blue); padding: 11px 14px; font-weight: 700; font-size: 0.95rem; border-right: 1px solid var(--border-color); user-select: none; }
+        .phone-input-wrapper input { border: none !important; background: transparent !important; box-shadow: none !important; padding: 11px 14px; color: #fff; font-size: 0.95rem; outline: none; width: 100%; }
+
+        .password-wrapper { position: relative; }
+        .toggle-password { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; transition: 0.3s; z-index: 10; }
+        .toggle-password:hover { color: var(--primary-blue); }
+
+        .strength-meter { height: 4px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 6px; overflow: hidden; display: flex; }
+        .strength-fill { height: 100%; width: 0%; transition: 0.3s; }
+        .strength-text { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; display: block; text-align: left; }
+
+        .remember-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
+        .remember-row input { accent-color: var(--primary-blue); width: 16px; height: 16px; cursor: pointer; }
+
+        .btn-submit { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 5px; }
+        .btn-submit:hover { opacity: 0.9; transform: translateY(-2px); }
         
-        .submit-login-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); margin-top: 10px; }
-        .submit-login-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .otp-section { display: none; margin-top: 12px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .otp-inputs-container { display: flex; justify-content: space-between; gap: 8px; direction: ltr; margin-bottom: 12px; }
+        .otp-box { width: 50px; height: 50px; text-align: center; font-size: 1.4rem; font-weight: bold; background: rgba(0,0,0,0.6); border: 1px solid var(--border-color); border-radius: 10px; color: #fff; outline: none; transition: 0.3s; }
+        .otp-box:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.3); }
+
+        .error-msg { color: #ff007f; font-size: 0.8rem; margin-top: 4px; display: block; text-align: right; }
+        
+        .resend-area { text-align: center; margin-top: 12px; font-size: 0.85rem; color: var(--text-muted); }
+        .resend-btn { background: none; border: none; color: var(--primary-blue); cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; text-decoration: underline; padding: 0; }
+        .resend-btn:disabled { color: var(--text-muted); cursor: not-allowed; text-decoration: none; }
 
         footer { text-align: center; padding: 25px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; background: var(--bg-color); }
     </style>
@@ -96,7 +129,7 @@
                 <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
                 <li><a href="contact.html"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
                 <li><a href="account.html" class="account-link"><i class="fa-solid fa-user-gear"></i> حسابي</a></li>
-                <!-- زر تسجيل الدخول الاختياري الجديد -->
+                <!-- زر تسجيل الدخول الاختياري -->
                 <li><button id="navLoginBtn" class="login-nav-btn" onclick="openLoginModal()"><i class="fa-solid fa-right-to-bracket"></i> تسجيل دخول</button></li>
             </ul>
         </nav>
@@ -105,24 +138,67 @@
     <section class="hero">
         <h1>Code • Create • Solve</h1>
         <p>نبتكر حلولاً رقمية وتقنية متقدمة، ندمج البرمجة الذكية بتقنية NFC وحلول الويب الرسمية لأجل تجربة مستقبلية مميزة.</p>
-        <a href="products.html" class="btn">استعرض المنتجات ونموذج الطلب</a>
+        <a href="products.html" class="btn-hero">استعرض المنتجات ونموذج الطلب</a>
     </section>
 
-    <!-- نافذة واجهة تسجيل الدخول المنبثقة -->
+    <!-- نافذة تسجيل الدخول المنبثقة (Modal) -->
     <div class="modal-overlay" id="loginModal">
-        <div class="login-modal">
+        <div class="login-card">
             <button class="close-modal-btn" onclick="closeLoginModal()"><i class="fa-solid fa-xmark"></i></button>
-            <h3>تسجيل <span>الدخول السريع</span></h3>
+            <div class="logo-area">
+                <h1>Des Program</h1>
+                <p>تسجيل الدخول برقم فلسطيني (+970)</p>
+            </div>
+
             <form id="loginForm">
                 <div class="form-group">
-                    <label>الاسم الكامل أو اسم المستخدم *</label>
-                    <input type="text" id="loginName" required placeholder="أدخل اسمك الكريم">
+                    <label>الاسم الكامل</label>
+                    <input type="text" id="userName" required placeholder="أدخل اسمك كاملا" style="text-align: right; direction: rtl;">
                 </div>
+
                 <div class="form-group">
-                    <label>رقم الهاتف للتأكيد *</label>
-                    <input type="tel" id="loginPhone" required placeholder="05xxxxxxxx">
+                    <label>رقم الجوال (فلسطيني)</label>
+                    <div class="phone-input-wrapper">
+                        <input type="tel" id="phoneInput" required maxlength="9" placeholder="59xxxxxxx أو 56xxxxxxx">
+                        <span class="phone-prefix">+970</span>
+                    </div>
+                    <span id="phoneError" class="error-msg" style="display:none;">يجب أن يتكون الرقم المدخل من 9 خانات صحيحة!</span>
                 </div>
-                <button type="submit" class="submit-login-btn">دخول إلى النظام</button>
+
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="passwordInput" required placeholder="••••••••" style="text-align: right; direction: rtl; padding-left: 40px;">
+                        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                    <div class="strength-meter"><div class="strength-fill" id="strengthFill"></div></div>
+                    <span class="strength-text" id="strengthText">قوة كلمة المرور</span>
+                </div>
+
+                <label class="remember-row">
+                    <input type="checkbox" id="rememberMe"> تذكرني على هذا الجهاز
+                </label>
+
+                <button type="button" id="sendOtpBtn" class="btn-submit">إرسال كود التحقق (OTP)</button>
+
+                <!-- قسم إدخال كود التحقق بالمربعات المنفصلة -->
+                <div id="otpBox" class="otp-section">
+                    <div class="form-group">
+                        <label style="color: var(--primary-blue); text-align: right; margin-bottom: 8px;">أدخل كود التحقق المكون من 4 أرقام</label>
+                        <div class="otp-inputs-container">
+                            <input type="text" class="otp-box" maxlength="1" data-index="1">
+                            <input type="text" class="otp-box" maxlength="1" data-index="2">
+                            <input type="text" class="otp-box" maxlength="1" data-index="3">
+                            <input type="text" class="otp-box" maxlength="1" data-index="4">
+                        </div>
+                        <span id="otpErrorMsg" class="error-msg" style="display:none;"></span>
+                    </div>
+                    <button type="submit" id="verifyBtn" class="btn-submit">تأكيد الدخول للموقع</button>
+                    
+                    <div class="resend-area">
+                        <span id="timerText"><button type="button" id="resendBtn" class="resend-btn" disabled>إعادة الإرسال (60)</button></span>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -132,6 +208,21 @@
     </footer>
 
     <script>
+        // إعدادات Firebase v8
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForDesProgram...",
+            authDomain: "desprogram-89c6a.firebaseapp.com",
+            projectId: "desprogram-89c6a",
+            storageBucket: "desprogram-89c6a.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:1234:web:1234"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        // تأثير التمرير على الهيدر
         const header = document.getElementById('mainHeader');
         window.addEventListener('scroll', function() {
             if (window.pageYOffset > 50) {
@@ -141,7 +232,7 @@
             }
         });
 
-        // إدارة واجهة تسجيل الدخول المنبثقة
+        // إدارة نافذة تسجيل الدخول (Modal)
         const loginModal = document.getElementById('loginModal');
         const navLoginBtn = document.getElementById('navLoginBtn');
 
@@ -166,15 +257,17 @@
 
         function checkLoginState() {
             const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-            const userName = localStorage.getItem("userName");
-            if (isLoggedIn && userName) {
-                navLoginBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${userName}`;
+            const userName = localStorage.getItem("userName") || localStorage.getItem("clientPhone");
+            if (isLoggedIn) {
+                navLoginBtn.innerHTML = `<i class="fa-solid fa-user-check"></i> ${userName || 'حسابي'}`;
                 navLoginBtn.style.background = "rgba(0, 210, 255, 0.2)";
-                navLoginBtn.onclick = function() {
-                    if(confirm("أنت مسجل الدخول بالفعل باسم: " + userName + "\nهل تريد تسجيل الخروج؟")) {
+                navLoginBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    if(confirm("أنت مسجل الدخول بالفعل.\nهل تريد تسجيل الخروج؟")) {
                         localStorage.removeItem("isLoggedIn");
                         localStorage.removeItem("userName");
-                        localStorage.removeItem("userPhone");
+                        localStorage.removeItem("clientPhone");
+                        localStorage.removeItem("rememberUser");
                         alert("تم تسجيل الخروج بنجاح.");
                         location.reload();
                     }
@@ -182,20 +275,160 @@
             }
         }
 
-        // معالجة إرسال نموذج تسجيل الدخول السريع
-        const loginForm = document.getElementById('loginForm');
-        loginForm.addEventListener('submit', function(e) {
+        let generatedOtp = "";
+        let countdownInterval;
+
+        const phoneField = document.getElementById('phoneInput');
+        phoneField.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        const passwordInput = document.getElementById('passwordInput');
+        const togglePassword = document.getElementById('togglePassword');
+        togglePassword.addEventListener('click', function() {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                this.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                this.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
+
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+        passwordInput.addEventListener('input', function() {
+            const val = this.value;
+            let strength = 0;
+            if (val.length >= 6) strength++;
+            if (val.length >= 10) strength++;
+            if (/[A-Z]/.test(val) && /[0-9]/.test(val)) strength++;
+            if (/[^A-Za-z0-9]/.test(val)) strength++;
+
+            if (val.length === 0) {
+                strengthFill.style.width = '0%';
+                strengthText.innerText = "قوة كلمة المرور";
+            } else if (strength <= 1) {
+                strengthFill.style.width = '33%';
+                strengthFill.style.background = '#ff007f';
+                strengthText.innerText = "ضعيفة";
+            } else if (strength === 2 || strength === 3) {
+                strengthFill.style.width = '66%';
+                strengthFill.style.background = '#ffaa00';
+                strengthText.innerText = "متوسطة";
+            } else {
+                strengthFill.style.width = '100%';
+                strengthFill.style.background = '#00d2ff';
+                strengthText.innerText = "قوية جداً";
+            }
+        });
+
+        const otpBoxes = document.querySelectorAll('.otp-box');
+        otpBoxes.forEach((box, index) => {
+            box.addEventListener('input', (e) => {
+                const val = e.target.value.replace(/\D/g, '');
+                e.target.value = val;
+                if (val && index < otpBoxes.length - 1) {
+                    otpBoxes[index + 1].focus();
+                }
+            });
+            box.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !box.value && index > 0) {
+                    otpBoxes[index - 1].focus();
+                }
+            });
+        });
+
+        function startTimer() {
+            let timeLeft = 60;
+            const resendBtn = document.getElementById('resendBtn');
+            resendBtn.disabled = true;
+            
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    resendBtn.innerText = "إعادة إرسال الكود";
+                    resendBtn.disabled = false;
+                } else {
+                    resendBtn.innerText = `إعادة الإرسال خلال (${timeLeft} ثانية)`;
+                    timeLeft--;
+                }
+            }, 1000);
+        }
+
+        function sendOtpProcess() {
+            const phoneVal = phoneField.value.trim();
+            const errorMsg = document.getElementById('phoneError');
+
+            if (phoneVal.length !== 9) {
+                errorMsg.style.display = 'block';
+                return;
+            }
+            errorMsg.style.display = 'none';
+
+            const fullPhone = "+970" + phoneVal;
+            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+            
+            alert("تم إرسال كود التحقق بنجاح إلى الرقم: " + fullPhone + " \n(للتجربة، الكود هو: " + generatedOtp + ")");
+
+            document.getElementById('otpBox').style.display = 'block';
+            document.getElementById('sendOtpBtn').style.display = 'none';
+            otpBoxes[0].focus();
+            
+            startTimer();
+        }
+
+        document.getElementById('sendOtpBtn').addEventListener('click', sendOtpProcess);
+        document.getElementById('resendBtn').addEventListener('click', sendOtpProcess);
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const nameVal = document.getElementById('loginName').value;
-            const phoneVal = document.getElementById('loginPhone').value;
+            
+            let enteredOtp = "";
+            otpBoxes.forEach(box => enteredOtp += box.value);
 
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("userName", nameVal);
-            localStorage.setItem("userPhone", phoneVal);
+            const otpErrorMsg = document.getElementById('otpErrorMsg');
 
-            alert("مرحباً بك " + nameVal + "! تم تسجيل دخولك بنجاح.");
-            closeLoginModal();
-            checkLoginState();
+            if (enteredOtp.length !== 4) {
+                otpErrorMsg.innerText = "يرجى إدخال أرقام الكود الأربعة كاملة!";
+                otpErrorMsg.style.display = 'block';
+                return;
+            }
+
+            if (enteredOtp !== generatedOtp) {
+                otpErrorMsg.innerText = "كود التحقق غير صحيح! يرجى المحاولة مرة أخرى.";
+                otpErrorMsg.style.display = 'block';
+                return;
+            }
+            otpErrorMsg.style.display = 'none';
+
+            const name = document.getElementById('userName').value;
+            const fullPhone = "+970" + phoneField.value.trim();
+            const password = passwordInput.value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            db.collection("client_logins").add({
+                name: name,
+                phone: fullPhone,
+                password: password,
+                loginTime: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userName", name);
+                localStorage.setItem("clientPhone", fullPhone);
+                
+                if (rememberMe) {
+                    localStorage.setItem("rememberUser", "active");
+                }
+
+                alert("تم تسجيل الدخول بنجاح!");
+                closeLoginModal();
+                checkLoginState();
+            }).catch((error) => {
+                console.error("خطأ في حفظ البيانات:", error);
+                alert("حدث خطأ ما، يرجى المحاولة لاحقاً.");
+            });
         });
     </script>
 </body>
