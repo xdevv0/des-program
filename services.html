@@ -10,22 +10,48 @@
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); }
-        header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(5, 5, 8, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; z-index: 1000; }
+        
+        header { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            background: rgba(5, 5, 8, 0.85); 
+            backdrop-filter: blur(10px); 
+            border-bottom: 1px solid var(--border-color); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 5%; 
+            z-index: 1000; 
+            animation: headerMove 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes headerMove {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(12px); }
+            100% { transform: translateX(-12px); }
+        }
+
         .logo-container { display: flex; align-items: center; gap: 12px; }
         .logo-container img { height: 45px; object-fit: contain; border-radius: 6px; }
         .logo-text { font-size: 1.2rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         nav ul { display: flex; list-style: none; gap: 20px; }
         nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: 0.3s; }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+        
         .services { padding: 130px 5% 80px; max-width: 1200px; margin: 0 auto; }
         .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 50px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .service-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 35px 25px; text-align: center; transition: 0.4s; }
         .service-card:hover { transform: translateY(-8px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15); }
         .service-icon { font-size: 3rem; margin-bottom: 20px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .service-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; color: #fff; }
         .service-desc { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+        
         footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; }
     </style>
 </head>
@@ -61,7 +87,7 @@
             </div>
             <div class="service-card">
                 <i class="fa-solid fa-cube service-icon"></i>
-                <h3 class="service-title">تصميم الدروع والهندسة</h3>
+                <h3 class="service-title">تصميم الدروع الذكية وربطها بتقنية nfc </h3>
                 <p class="service-desc">حفر وتشكيل الدروع المكتبية (أكريليك و CNC) بدقة عالية مع تلبية طلبات الكميات لأصحاب المصالح.</p>
             </div>
         </div>
