@@ -14,9 +14,8 @@
     <style>
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); }
+        body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; }
         
-        /* الشريط العلوي المتحرك / الثابت بذكاء + حركة الهيدر يمين ويسار */
         header { 
             position: fixed; 
             top: 0; 
@@ -28,27 +27,35 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 15px 5%; 
+            padding: 10px 4%; 
             z-index: 1000; 
             transition: transform 0.3s ease, background-color 0.3s ease; 
             animation: headerMove 6s ease-in-out infinite alternate;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         header.scrolled { background: rgba(5, 5, 8, 0.98); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
 
         @keyframes headerMove {
             0% { transform: translateX(0); }
-            50% { transform: translateX(12px); }
-            100% { transform: translateX(-12px); }
+            50% { transform: translateX(6px); }
+            100% { transform: translateX(-6px); }
         }
         
-        .logo-container { display: flex; align-items: center; gap: 12px; }
-        .logo-container img { height: 45px; object-fit: contain; border-radius: 6px; }
-        .logo-text { font-size: 1.2rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-container { display: flex; align-items: center; gap: 8px; }
+        .logo-container img { height: 32px; max-width: 100%; object-fit: contain; border-radius: 6px; }
+        .logo-text { font-size: 0.95rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        nav ul { display: flex; list-style: none; gap: 20px; }
-        nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: 0.3s; }
+        nav ul { display: flex; list-style: none; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
+        nav ul li a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.75rem; transition: 0.3s; white-space: nowrap; }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
         
+        @media(max-width: 768px) {
+            header { justify-content: center; padding: 8px 2%; }
+            nav ul { gap: 8px; }
+            nav ul li a { font-size: 0.7rem; }
+        }
+
         .products-container { padding: 140px 5% 80px; max-width: 1300px; margin: 0 auto; }
         .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 15px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -57,9 +64,12 @@
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; direction: rtl; }
         .product-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; position: relative; }
         .product-card:hover { transform: translateY(-8px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15); }
-        .product-img-container { width: 100%; height: 240px; overflow: hidden; background: #000; position: relative; }
+        
+        /* ضبط إطار وحجم الصور لتتطابق تماماً مع مربع العرض بدون أي تشويه */
+        .product-img-container { width: 100%; height: 220px; overflow: hidden; background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
         .product-img-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .watermark-logo { position: absolute; bottom: 10px; left: 10px; height: 32px !important; width: auto !important; opacity: 0.85; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.6); padding: 2px; }
+        
+        .watermark-logo { position: absolute; bottom: 10px; left: 10px; height: 28px !important; width: auto !important; opacity: 0.85; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.6); padding: 2px; }
         .product-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
         .product-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; color: var(--primary-blue); }
         
