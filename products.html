@@ -56,18 +56,18 @@
             nav ul li a { font-size: 0.7rem; }
         }
 
-        .products-container { padding: 140px 5% 80px; max-width: 1300px; margin: 0 auto; }
+        .products-container { padding: 130px 5% 80px; max-width: 1300px; margin: 0 auto; }
         .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 15px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 50px; font-size: 1.1rem; }
+        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem; }
         
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; direction: rtl; }
         .product-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; transition: 0.4s; display: flex; flex-direction: column; position: relative; }
         .product-card:hover { transform: translateY(-8px); border-color: var(--primary-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15); }
         
-        /* ضبط إطار وحجم الصور لتتطابق تماماً مع مربع العرض بدون أي تشويه */
+        /* ضبط إطار وحجم الصور لتتطابق تماماً مع مربع العرض وبأبعاد متساوية ومنسقة تماماً */
         .product-img-container { width: 100%; height: 220px; overflow: hidden; background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
-        .product-img-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .product-img-container img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s; }
         
         .watermark-logo { position: absolute; bottom: 10px; left: 10px; height: 28px !important; width: auto !important; opacity: 0.85; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.6); padding: 2px; }
         .product-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
@@ -89,14 +89,13 @@
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: 0.3s; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
         
-        /* الصناديق الديناميكية المخفية افتراضياً */
         .dynamic-field { display: none; margin-top: 15px; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
         .submit-order-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 14px; border: none; border-radius: 8px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); }
         .submit-order-btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; margin-top: 50px; }
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; margin-top: 50px; background: var(--bg-color); }
         @media(max-width: 768px) { .form-grid { grid-template-columns: 1fr; } .form-group.full-width { grid-column: span 1; } }
     </style>
 </head>
@@ -208,13 +207,13 @@
                             <option value="درع أكريليك NFC - برمجة من طرفنا (160 شيكل)">درع أكريليك NFC - برمجة وربط من طرفنا (160 شيكل)</option>
                         </select>
 
-                        <!-- صندوق تفاصيل التصميم (يظهر فقط إذا كان العمل من طرفنا) -->
+                        <!-- صندوق تفاصيل التصميم -->
                         <div id="designDetailsBox" class="dynamic-field">
                             <label style="margin-top: 15px; color: var(--primary-blue);"><i class="fa-solid fa-pen-nib"></i> اشرح لنا تفاصيل التصميم والمحتوى المطلوب بدقة:</label>
                             <textarea id="clientDesignDetails" rows="4" placeholder="اكتب الألوان، الروابط، النصوص، أو الفكرة التي تريدها أن تظهر في موقعك المصمم من طرفنا..."></textarea>
                         </div>
 
-                        <!-- صندوق رابط الموقع (يظهر فقط إذا كان الموقع من جهة الزبون) -->
+                        <!-- صندوق رابط الموقع -->
                         <div id="websiteLinkBox" class="dynamic-field">
                             <label style="margin-top: 15px; color: #25d366;"><i class="fa-solid fa-link"></i> أضف رابط موقعك الخاص (الذي سيرتبط بـ NFC):</label>
                             <input type="url" id="clientWebsiteLink" placeholder="https://example.com">
@@ -231,20 +230,15 @@
     </footer>
 
     <script>
-        // تأثير حركة الشريط العلوي عند التمرير
-        let lastScrollTop = 0;
         const header = document.getElementById('mainHeader');
         window.addEventListener('scroll', function() {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > 50) {
+            if (window.pageYOffset > 50) {
                 header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
             }
-            lastScrollTop = scrollTop;
         });
 
-        // إظهار وإخفاء الحقول بناءً على اختيار الزبون
         const productChoice = document.getElementById('productChoice');
         const designDetailsBox = document.getElementById('designDetailsBox');
         const websiteLinkBox = document.getElementById('websiteLinkBox');
@@ -252,7 +246,6 @@
         productChoice.addEventListener('change', function() {
             const selectedVal = this.value;
             
-            // إعادة تعيين وحذف الإجبارية مؤقتاً
             designDetailsBox.style.display = 'none';
             websiteLinkBox.style.display = 'none';
             document.getElementById('clientDesignDetails').removeAttribute('required');
@@ -267,7 +260,6 @@
             }
         });
 
-        // إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForDesProgram...",
             authDomain: "desprogram-89c6a.firebaseapp.com",
@@ -292,7 +284,6 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            // إضافة الحقل المناسب حسب اختيار العميل
             if (productChoice.value.includes('برمجة من طرفنا')) {
                 orderData.designDetails = document.getElementById('clientDesignDetails').value;
             } else if (productChoice.value.includes('موقع من الزبون')) {
