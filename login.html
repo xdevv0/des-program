@@ -12,7 +12,16 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
-        :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
+        :root { 
+            --bg-color: #050508; 
+            --card-bg: #0f1019; 
+            --primary-blue: #00d2ff; 
+            --primary-purple: #9d4edd; 
+            --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); 
+            --text-color: #ffffff; 
+            --text-muted: #a0a0b0; 
+            --border-color: rgba(0, 210, 255, 0.2); 
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
@@ -29,7 +38,7 @@
         .phone-input-wrapper { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: 0.3s; direction: row-reverse; }
         .phone-input-wrapper:focus-within { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
         
-        .phone-prefix-select { background: rgba(0, 210, 255, 0.1); color: var(--primary-blue); padding: 12px 12px; font-weight: 700; font-size: 0.95rem; border: none; border-left: 1px solid var(--border-color); outline: none; cursor: pointer; direction: ltr; }
+        .phone-prefix-select { background: rgba(0, 210, 255, 0.1); color: var(--primary-blue); padding: 12px 14px; font-weight: 700; font-size: 0.95rem; border: none; border-left: 1px solid var(--border-color); outline: none; cursor: pointer; direction: ltr; }
         .phone-prefix-select option { background: #0f1019; color: #fff; }
 
         .phone-input-wrapper input { border: none !important; background: transparent !important; box-shadow: none !important; padding: 12px 15px; color: #fff; font-size: 0.95rem; outline: none; width: 100%; text-align: right; direction: ltr; }
@@ -80,8 +89,10 @@
             <div class="form-group">
                 <label>رقم الجوال</label>
                 <div class="phone-input-wrapper">
-                    <!-- القائمة المنسدلة ستتم تعبئتها أوتوماتيكياً بواسطة الجافاسكريبت لضمان ظهورها -->
-                    <select id="phonePrefixSelect" class="phone-prefix-select"></select>
+                    <select id="phonePrefixSelect" class="phone-prefix-select">
+                        <option value="+970">+970</option>
+                        <option value="+972">+972</option>
+                    </select>
                     <input type="tel" id="phoneInput" required maxlength="9" placeholder="59xxxxxxx">
                 </div>
                 <span id="phoneError" class="error-msg" style="display:none;">يجب أن يتكون الرقم المدخل من 9 خانات صحيحة!</span>
@@ -103,7 +114,6 @@
 
             <button type="button" id="sendOtpBtn" class="btn">إرسال كود التحقق (OTP)</button>
 
-            <!-- قسم إدخال كود التحقق بالمربعات المنفصلة -->
             <div id="otpBox" class="otp-section">
                 <div class="form-group">
                     <label style="color: var(--primary-blue); text-align: right; margin-bottom: 10px;">أدخل كود التحقق المكون من 4 أرقام</label>
@@ -125,15 +135,6 @@
     </div>
 
     <script>
-        // حقن الخيارات برمجياً لضمان ظهورها رغم أنف الكاش
-        window.addEventListener('DOMContentLoaded', () => {
-            const select = document.getElementById('phonePrefixSelect');
-            select.innerHTML = `
-                <option value="+970">+970</option>
-                <option value="+972">+972</option>
-            `;
-        });
-
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForDesProgram...",
             authDomain: "desprogram-89c6a.firebaseapp.com",
