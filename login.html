@@ -16,24 +16,25 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
-        .login-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; width: 100%; max-width: 460px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .login-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; width: 100%; max-width: 460px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); position: relative; }
         .logo-area { text-align: center; margin-bottom: 25px; }
         .logo-area h1 { font-size: 1.8rem; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
         .logo-area p { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
 
-        .form-group { margin-bottom: 18px; position: relative; }
+        .form-group { margin-bottom: 18px; position: relative; text-align: right; }
         .form-group label { display: block; margin-bottom: 6px; color: var(--text-muted); font-weight: 500; font-size: 0.85rem; }
         .form-group input { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
         .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
 
+        /* الحاوية بمعكوس الاتجاه لضمان ظهور القائمة يميناً ورقم الجوال يساراً تماماً */
         .phone-input-wrapper { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: 0.3s; direction: ltr; }
         .phone-input-wrapper:focus-within { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
         
-        /* تنسيق قائمة اختيار مفتاح الدولة */
-        .phone-prefix-select { background: rgba(255, 255, 255, 0.05); color: var(--primary-blue); padding: 12px 10px; font-weight: 700; font-size: 0.95rem; border: none; border-right: 1px solid var(--border-color); outline: none; cursor: pointer; direction: ltr; }
+        /* تنسيق قائمة اختيار مفتاح الدولة لتكون واضحة */
+        .phone-prefix-select { background: rgba(0, 210, 255, 0.1); color: var(--primary-blue); padding: 12px 12px; font-weight: 700; font-size: 0.95rem; border: none; border-right: 1px solid var(--border-color); outline: none; cursor: pointer; direction: ltr; }
         .phone-prefix-select option { background: #0f1019; color: #fff; }
 
-        .phone-input-wrapper input { border: none !important; background: transparent !important; box-shadow: none !important; padding: 12px 15px; color: #fff; font-size: 0.95rem; outline: none; width: 100%; }
+        .phone-input-wrapper input { border: none !important; background: transparent !important; box-shadow: none !important; padding: 12px 15px; color: #fff; font-size: 0.95rem; outline: none; width: 100%; text-align: left; }
 
         .password-wrapper { position: relative; }
         .toggle-password { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; transition: 0.3s; z-index: 10; }
@@ -81,12 +82,13 @@
             <div class="form-group">
                 <label>رقم الجوال</label>
                 <div class="phone-input-wrapper">
-                    <!-- قائمة اختيار مفتاح الدولة المحدثة -->
+                    <!-- حقل إدخال رقم الجوال في اليسار -->
+                    <input type="tel" id="phoneInput" required maxlength="9" placeholder="59xxxxxxx أو 52xxxxxxx">
+                    <!-- القائمة المنسدلة لمفتاح الدولة في اليمين -->
                     <select id="phonePrefixSelect" class="phone-prefix-select">
                         <option value="+970">+970</option>
                         <option value="+972">+972</option>
                     </select>
-                    <input type="tel" id="phoneInput" required maxlength="9" placeholder="أدخل الرقم بدون مفتاح">
                 </div>
                 <span id="phoneError" class="error-msg" style="display:none;">يجب أن يتكون الرقم المدخل من 9 خانات صحيحة!</span>
             </div>
