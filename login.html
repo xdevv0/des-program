@@ -26,15 +26,15 @@
         .form-group input { width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
         .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
 
-        /* الحاوية بمعكوس الاتجاه لضمان ظهور القائمة يميناً ورقم الجوال يساراً تماماً */
-        .phone-input-wrapper { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: 0.3s; direction: ltr; }
+        /* الحاوية بمعكوس الاتجاه لجعل القائمة يميناً ورقم الجوال يساراً تماماً */
+        .phone-input-wrapper { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: 0.3s; direction: row-reverse; }
         .phone-input-wrapper:focus-within { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
         
-        /* تنسيق قائمة اختيار مفتاح الدولة لتكون واضحة */
-        .phone-prefix-select { background: rgba(0, 210, 255, 0.1); color: var(--primary-blue); padding: 12px 12px; font-weight: 700; font-size: 0.95rem; border: none; border-right: 1px solid var(--border-color); outline: none; cursor: pointer; direction: ltr; }
+        /* تنسيق قائمة اختيار مفتاح الدولة لتكون في اليمين */
+        .phone-prefix-select { background: rgba(0, 210, 255, 0.1); color: var(--primary-blue); padding: 12px 12px; font-weight: 700; font-size: 0.95rem; border: none; border-left: 1px solid var(--border-color); outline: none; cursor: pointer; direction: ltr; }
         .phone-prefix-select option { background: #0f1019; color: #fff; }
 
-        .phone-input-wrapper input { border: none !important; background: transparent !important; box-shadow: none !important; padding: 12px 15px; color: #fff; font-size: 0.95rem; outline: none; width: 100%; text-align: left; }
+        .phone-input-wrapper input { border: none !important; background: transparent !important; box-shadow: none !important; padding: 12px 15px; color: #fff; font-size: 0.95rem; outline: none; width: 100%; text-align: right; direction: ltr; }
 
         .password-wrapper { position: relative; }
         .toggle-password { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; transition: 0.3s; z-index: 10; }
@@ -82,13 +82,13 @@
             <div class="form-group">
                 <label>رقم الجوال</label>
                 <div class="phone-input-wrapper">
-                    <!-- حقل إدخال رقم الجوال في اليسار -->
-                    <input type="tel" id="phoneInput" required maxlength="9" placeholder="59xxxxxxx أو 52xxxxxxx">
                     <!-- القائمة المنسدلة لمفتاح الدولة في اليمين -->
                     <select id="phonePrefixSelect" class="phone-prefix-select">
                         <option value="+970">+970</option>
                         <option value="+972">+972</option>
                     </select>
+                    <!-- حقل إدخال رقم الجوال في اليسار -->
+                    <input type="tel" id="phoneInput" required maxlength="9" placeholder="59xxxxxxx">
                 </div>
                 <span id="phoneError" class="error-msg" style="display:none;">يجب أن يتكون الرقم المدخل من 9 خانات صحيحة!</span>
             </div>
