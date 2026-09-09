@@ -25,15 +25,13 @@
         .logo-container img { height: 32px; object-fit: contain; border-radius: 6px; }
         .logo-text { font-size: 0.95rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        /* روابط الشريط العلوي الموحد */
+        /* روابط الشريط العلوي الموحد (تمت إزالة رابط حسابي) */
         nav ul { display: flex; list-style: none; gap: 15px; align-items: center; flex-wrap: wrap; }
         nav ul li a { 
             color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.85rem; 
             transition: 0.3s; white-space: nowrap; display: flex; align-items: center; gap: 5px; 
         }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
-        nav ul li a.account-link { color: var(--primary-blue); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; background: rgba(0, 210, 255, 0.05); }
-        nav ul li a.account-link:hover { background: rgba(0, 210, 255, 0.15); }
 
         @media(max-width: 900px) {
             header { flex-direction: column; gap: 10px; padding: 10px 2%; }
@@ -65,7 +63,7 @@
             <span class="logo-text">Des Program</span>
         </a>
         
-        <!-- الشريط العلوي الموحد لجميع الأقسام ورابط حسابي -->
+        <!-- الشريط العلوي الموحد (بدون رابط حسابي) -->
         <nav>
             <ul>
                 <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
@@ -73,7 +71,6 @@
                 <li><a href="services.html"><i class="fa-solid fa-layer-group"></i> خدماتنا</a></li>
                 <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
                 <li><a href="contact.html" class="active"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
-                <li><a href="account.html" class="account-link"><i class="fa-solid fa-user-gear"></i> حسابي</a></li>
             </ul>
         </nav>
     </header>
