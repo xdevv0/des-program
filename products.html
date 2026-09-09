@@ -36,8 +36,6 @@
             transition: 0.3s; white-space: nowrap; display: flex; align-items: center; gap: 5px; 
         }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
-        nav ul li a.account-link { color: var(--primary-blue); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; background: rgba(0, 210, 255, 0.05); }
-        nav ul li a.account-link:hover { background: rgba(0, 210, 255, 0.15); }
 
         @media(max-width: 900px) {
             header { flex-direction: column; gap: 10px; padding: 10px 2%; }
@@ -117,7 +115,7 @@
             <span class="logo-text">Des Program</span>
         </a>
         
-        <!-- الشريط العلوي الموحد لجميع الأقسام ورابط حسابي -->
+        <!-- الشريط العلوي بدون أي رابط لحسابي أو تسجيل دخول -->
         <nav>
             <ul>
                 <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
@@ -125,7 +123,6 @@
                 <li><a href="services.html"><i class="fa-solid fa-layer-group"></i> خدماتنا</a></li>
                 <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
                 <li><a href="contact.html"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
-                <li><a href="account.html" class="account-link"><i class="fa-solid fa-user-gear"></i> حسابي</a></li>
             </ul>
         </nav>
     </header>
@@ -191,7 +188,7 @@
                 </div>
             </div>
 
-            <!-- بناء موقع إلكتروني (تم تحديث الصورة بـ webdes.png مع ضمان ظهورها كاملة ومدروسة) -->
+            <!-- بناء موقع إلكتروني -->
             <div class="product-card" style="border-color: var(--primary-blue);">
                 <div class="product-img-container">
                     <img src="webdes.png" alt="بناء موقع إلكتروني" onerror="this.src='https://via.placeholder.com/400x300?text=Web+Development'">
@@ -243,7 +240,7 @@
                             <select id="deliveryMethod" required>
                                 <option value="" disabled selected>-- اختر الطريقة --</option>
                                 <option value="توصيل">توصيل</option>
-                                <option value="استلام شخصي">استلام شخصي (من نقطة الاستلام المجانية - قلقيلية - شارع الاستخبارات العسكرية - beetle sweet )</option>                            </select>
+                                <option value="استلام شخصي">استلام شخصي (من نقطة الاستلام المجانية - قلقيلية - شارع الاستخبارات العسكرية - beetle sweet )</option>                           </select>
                         </div>
 
                         <div class="form-group" id="cityGroup">
@@ -400,16 +397,7 @@
         orderForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-            if (!isLoggedIn) {
-                alert("عذراً، يرجى تسجيل الدخول أولاً من صفحة (حسابي) لإتمام وإرسال الطلب رسمياً.");
-                window.location.href = "account.html";
-                return;
-            }
-            
             let clientNameVal = document.getElementById('clientName').value;
-            localStorage.setItem("userName", clientNameVal);
-
             let selectedMethod = deliveryMethod.value;
             let orderData = {
                 clientName: clientNameVal,
@@ -430,7 +418,7 @@
 
             db.collection("orders").add(orderData)
             .then(() => {
-                alert("تم إرسال طلبك بنجاح! يمكنك متابعته من خلال لوحة (حسابي).");
+                alert("تم إرسال طلبك بنجاح!");
                 orderForm.reset();
                 updateProductFields();
                 closeOrderModal();
