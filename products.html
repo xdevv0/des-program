@@ -30,17 +30,33 @@
         .logo-text { font-size: 0.95rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
         /* روابط الشريط العلوي */
-        nav ul { display: flex; list-style: none; gap: 15px; align-items: center; flex-wrap: wrap; }
+        nav ul { display: flex; list-style: none; gap: 12px; align-items: center; flex-wrap: wrap; }
         nav ul li a { 
-            color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.85rem; 
-            transition: 0.3s; white-space: nowrap; display: flex; align-items: center; gap: 5px; 
+            color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.8rem; 
+            transition: 0.3s; white-space: nowrap; display: flex; align-items: center; gap: 4px; 
         }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
 
+        /* ستايل زر سلتي وطلباتي */
+        .cart-nav-btn {
+            background: rgba(0, 210, 255, 0.1) !important;
+            border: 1px solid var(--primary-blue) !important;
+            color: var(--primary-blue) !important;
+            padding: 5px 10px !important;
+            border-radius: 8px;
+            font-weight: 700 !important;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.15);
+        }
+        .cart-nav-btn:hover {
+            background: var(--primary-blue) !important;
+            color: #fff !important;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+        }
+
         @media(max-width: 900px) {
             header { flex-direction: column; gap: 10px; padding: 10px 2%; }
-            nav ul { justify-content: center; gap: 10px; }
-            nav ul li a { font-size: 0.75rem; }
+            nav ul { justify-content: center; gap: 8px; }
+            nav ul li a { font-size: 0.7rem; }
         }
 
         .products-container { padding: 140px 5% 80px; max-width: 1300px; margin: 0 auto; }
@@ -68,7 +84,6 @@
         .card-order-btn { width: 100%; background: var(--accent-gradient); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 15px; text-align: center; box-shadow: 0 0 15px rgba(157, 78, 221, 0.3); }
         .card-order-btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
-        /* أزرار التواصل السريع للمواقع الإلكترونية */
         .quick-contact-container { display: flex; gap: 10px; margin-top: 15px; }
         .quick-btn { flex: 1; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; color: #fff; }
         .whatsapp-btn { background-color: #25d366; box-shadow: 0 0 15px rgba(37, 211, 102, 0.3); }
@@ -115,7 +130,6 @@
             <span class="logo-text">Des Program</span>
         </a>
         
-        <!-- الشريط العلوي بدون أي رابط لحسابي أو تسجيل دخول -->
         <nav>
             <ul>
                 <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
@@ -123,6 +137,7 @@
                 <li><a href="services.html"><i class="fa-solid fa-layer-group"></i> خدماتنا</a></li>
                 <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
                 <li><a href="contact.html"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
+                <li><a href="cart.html" class="cart-nav-btn"><i class="fa-solid fa-bag-shopping"></i> سلتي وطلباتي</a></li>
             </ul>
         </nav>
     </header>
@@ -382,6 +397,7 @@
         productChoice.addEventListener('change', updateProductFields);
         clearProductBtn.addEventListener('click', function() { productChoice.selectedIndex = 0; updateProductFields(); });
 
+        // إعدادات Firebase والاتصال بقاعدة البيانات
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForDesProgram...",
             authDomain: "desprogram-89c6a.firebaseapp.com",
@@ -390,7 +406,9 @@
             messagingSenderId: "123456789",
             appId: "1:1234:web:1234"
         };
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.firestore();
 
         const orderForm = document.getElementById('orderForm');
@@ -398,13 +416,19 @@
             e.preventDefault();
             
             let clientNameVal = document.getElementById('clientName').value;
+            let clientPhoneVal = document.getElementById('clientPhone').value;
             let selectedMethod = deliveryMethod.value;
+
+            // تخزين رقم الهاتف في المتصفح لربطه بنظام الإشعارات الفورية
+            localStorage.setItem('des_client_phone', clientPhoneVal);
+
             let orderData = {
                 clientName: clientNameVal,
-                clientPhone: document.getElementById('clientPhone').value,
+                clientPhone: clientPhoneVal,
                 deliveryMethod: selectedMethod,
                 selectedProduct: productChoice.value,
                 quantity: parseInt(document.getElementById('orderQuantity').value),
+                status: "قيد المراجعة",
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
 
@@ -418,7 +442,7 @@
 
             db.collection("orders").add(orderData)
             .then(() => {
-                alert("تم إرسال طلبك بنجاح!");
+                alert("تم إرسال طلبك بنجاح! يمكنك متابعة حالة طلباتك عبر صفحة 'سلتي وطلباتي'.");
                 orderForm.reset();
                 updateProductFields();
                 closeOrderModal();
