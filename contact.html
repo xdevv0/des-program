@@ -7,6 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- مكتبات Firebase للإشعارات الفورية -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
     <style>
         :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
@@ -25,17 +29,33 @@
         .logo-container img { height: 32px; object-fit: contain; border-radius: 6px; }
         .logo-text { font-size: 0.95rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        /* روابط الشريط العلوي الموحد (تمت إزالة رابط حسابي) */
-        nav ul { display: flex; list-style: none; gap: 15px; align-items: center; flex-wrap: wrap; }
+        /* روابط الشريط العلوي الموحد مع زر سلتي المميز */
+        nav ul { display: flex; list-style: none; gap: 12px; align-items: center; flex-wrap: wrap; }
         nav ul li a { 
             color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.85rem; 
             transition: 0.3s; white-space: nowrap; display: flex; align-items: center; gap: 5px; 
         }
         nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
 
-        @media(max-width: 900px) {
+        /* ستايل زر سلتي وطلباتي */
+        .cart-nav-btn {
+            background: rgba(0, 210, 255, 0.1) !important;
+            border: 1px solid var(--primary-blue) !important;
+            color: var(--primary-blue) !important;
+            padding: 6px 12px !important;
+            border-radius: 8px;
+            font-weight: 700 !important;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.15);
+        }
+        .cart-nav-btn:hover {
+            background: var(--primary-blue) !important;
+            color: #fff !important;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+        }
+
+        @media(max-width: 992px) {
             header { flex-direction: column; gap: 10px; padding: 10px 2%; }
-            nav ul { justify-content: center; gap: 10px; }
+            nav ul { justify-content: center; gap: 8px; }
             nav ul li a { font-size: 0.75rem; }
         }
 
@@ -43,7 +63,7 @@
         .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 30px; font-weight: 900; }
         .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .contact-content { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; text-align: center; }
+        .contact-content { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .contact-content p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px; line-height: 1.6; }
         .social-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
         .social-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 700; color: #fff; transition: 0.3s; }
@@ -53,6 +73,17 @@
         .instagram-btn:hover { opacity: 0.9; transform: translateY(-3px); }
         
         footer { text-align: center; padding: 25px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; background: var(--bg-color); }
+
+        /* ستايل إشعارات السوشيال ميديا المنبثقة على الجوال */
+        .toast-notification {
+            position: fixed; bottom: 20px; left: 20px; background: var(--card-bg); 
+            border: 1px solid var(--primary-blue); color: #fff; padding: 15px 20px; 
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,210,255,0.3); 
+            z-index: 99999; display: flex; align-items: center; gap: 12px;
+            max-width: 320px; font-family: 'Tajawal', sans-serif;
+            animation: slideIn 0.4s ease;
+        }
+        @keyframes slideIn { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -63,7 +94,7 @@
             <span class="logo-text">Des Program</span>
         </a>
         
-        <!-- الشريط العلوي الموحد (بدون رابط حسابي) -->
+        <!-- الشريط العلوي الموحد مع زر سلتي وطلباتي -->
         <nav>
             <ul>
                 <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
@@ -71,6 +102,7 @@
                 <li><a href="services.html"><i class="fa-solid fa-layer-group"></i> خدماتنا</a></li>
                 <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
                 <li><a href="contact.html" class="active"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
+                <li><a href="cart.html" class="cart-nav-btn"><i class="fa-solid fa-bag-shopping"></i> سلتي وطلباتي</a></li>
             </ul>
         </nav>
     </header>
@@ -95,6 +127,60 @@
     </footer>
 
     <script>
+        // إعدادات Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForDesProgram...",
+            authDomain: "desprogram-89c6a.firebaseapp.com",
+            projectId: "desprogram-89c6a",
+            storageBucket: "desprogram-89c6a.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:1234:web:1234"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        // تفعيل الاستماع للإشعارات الفورية في حال كان الزبون مسجلاً رقمه في المتصفح
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedPhone = localStorage.getItem('des_client_phone');
+            if (savedPhone) {
+                db.collection("client_notifications")
+                    .where("clientPhone", "==", savedPhone)
+                    .orderBy("timestamp", "desc")
+                    .onSnapshot((snapshot) => {
+                        snapshot.docChanges().forEach((change) => {
+                            if (change.type === "added") {
+                                const notif = change.doc.data();
+                                showNotificationToast(notif.title, notif.message);
+                            }
+                        });
+                    });
+            }
+        });
+
+        // دالة عرض إشعار السوشيال ميديا المنبثق
+        function showNotificationToast(title, message) {
+            const oldToast = document.getElementById('activeToast');
+            if (oldToast) oldToast.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'activeToast';
+            toast.className = 'toast-notification';
+            toast.innerHTML = `
+                <div style="background: var(--accent-gradient); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fa-solid fa-bell" style="color: #fff;"></i>
+                </div>
+                <div>
+                    <h4 style="margin: 0 0 4px 0; font-size: 0.95rem; color: var(--primary-blue);">${title}</h4>
+                    <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">${message}</p>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => { if(toast) toast.remove(); }, 6000);
+        }
+
+        // تفاعل الهيدر عند التمرير
         window.addEventListener('scroll', function() {
             const header = document.getElementById('mainHeader');
             if (window.pageYOffset > 50) {
