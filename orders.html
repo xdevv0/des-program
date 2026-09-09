@@ -3,112 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سلتي وطلباتي - Des Program</title>
+    <title>Des Program - سلتي وطلباتي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- مكتبات Firebase -->
+    <!-- مكتبة Firebase v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <style>
-        :root { 
-            --bg-color: #050508; 
-            --card-bg: #0f1019; 
-            --primary-blue: #00d2ff; 
-            --primary-purple: #9d4edd; 
-            --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); 
-            --text-color: #ffffff; 
-            --text-muted: #a0a0b0; 
-            --border-color: rgba(0, 210, 255, 0.2); 
+        :root { --bg-color: #050508; --card-bg: #0f1019; --primary-blue: #00d2ff; --primary-purple: #9d4edd; --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #9d4edd 100%); --text-color: #ffffff; --text-muted: #a0a0b0; --border-color: rgba(0, 210, 255, 0.2); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-color); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        header { 
+            position: fixed; top: 0; left: 0; width: 100%; 
+            background: rgba(5, 5, 8, 0.95); backdrop-filter: blur(12px); 
+            border-bottom: 1px solid var(--border-color); 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 12px 4%; z-index: 1000; transition: background-color 0.3s ease; 
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 30px 5%; min-height: 100vh; }
+        header.scrolled { background: rgba(5, 5, 8, 0.98); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
         
-        .page-header { text-align: center; margin-bottom: 40px; border-bottom: 1px solid var(--border-color); padding-bottom: 25px; }
-        .page-header h1 { font-size: 2.2rem; font-weight: 900; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-        .page-header p { color: var(--text-muted); font-size: 1rem; }
-
-        /* صندوق إدخال رقم الهاتف للبحث عن الطلبات */
-        .login-box { max-width: 450px; margin: 0 auto 40px auto; background: var(--card-bg); border: 1px solid var(--border-color); padding: 30px; border-radius: 16px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .login-box h3 { margin-bottom: 15px; font-size: 1.2rem; color: #fff; }
-        .input-group { display: flex; gap: 10px; margin-top: 15px; }
-        .input-group input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); padding: 12px 15px; border-radius: 10px; color: #fff; font-family: 'Tajawal', sans-serif; font-size: 1rem; outline: none; transition: 0.3s; direction: ltr; text-align: right; }
-        .input-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(0,210,255,0.2); }
-        .input-group button { background: var(--accent-gradient); color: #fff; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; transition: 0.3s; }
-        .input-group button:hover { opacity: 0.85; transform: translateY(-1px); }
-
-        /* قسم عرض الطلبات */
-        .orders-section { display: none; }
-        .orders-section.active { display: block; }
+        .logo-container { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .logo-container img { height: 32px; object-fit: contain; border-radius: 6px; }
+        .logo-text { font-size: 0.95rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         
-        .client-info-bar { background: var(--card-bg); border: 1px solid var(--border-color); padding: 15px 25px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .client-info-bar span { color: var(--primary-blue); font-weight: 700; }
-        .change-phone-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--text-muted); color: var(--text-muted); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 0.85rem; transition: 0.3s; }
-        .change-phone-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-
-        .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        .order-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; position: relative; transition: 0.3s; }
-        .order-card:hover { border-color: var(--primary-blue); box-shadow: 0 5px 20px rgba(0,210,255,0.1); }
-        
-        .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-        .order-id { font-size: 0.85rem; color: var(--text-muted); font-family: monospace; }
-        
-        .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
-        .status-pending { background: rgba(255, 170, 0, 0.15); color: #ffaa00; }
-        .status-completed { background: rgba(0, 255, 128, 0.15); color: #00ff80; }
-
-        .order-item-title { font-size: 1.15rem; color: var(--primary-blue); font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .order-detail { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px; }
-        .order-detail span { color: #fff; font-weight: 500; }
-        
-        .extra-box { background: rgba(0, 210, 255, 0.05); border: 1px dashed var(--border-color); padding: 10px; border-radius: 8px; margin-top: 12px; font-size: 0.85rem; color: #e0d0f0; }
-        .extra-box a { color: var(--primary-blue); text-decoration: underline; }
-
-        .no-orders-msg { text-align: center; color: var(--text-muted); font-size: 1.1rem; padding: 40px; grid-column: 1 / -1; }
-
-        /* ستايل إشعارات السوشيال ميديا المنبثقة */
-        .toast-notification {
-            position: fixed; bottom: 20px; left: 20px; background: var(--card-bg); 
-            border: 1px solid var(--primary-blue); color: #fff; padding: 15px 20px; 
-            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,210,255,0.3); 
-            z-index: 99999; display: flex; align-items: center; gap: 12px;
-            max-width: 320px; font-family: 'Tajawal', sans-serif;
-            animation: slideIn 0.4s ease;
+        nav ul { display: flex; list-style: none; gap: 12px; align-items: center; flex-wrap: wrap; }
+        nav ul li a { 
+            color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.8rem; 
+            transition: 0.3s; white-space: nowrap; display: flex; align-items: center; gap: 4px; 
         }
-        @keyframes slideIn { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        nav ul li a:hover, nav ul li a.active { color: var(--primary-blue); text-shadow: 0 0 10px rgba(0, 210, 255, 0.5); }
+
+        .cart-nav-btn {
+            background: rgba(0, 210, 255, 0.1) !important;
+            border: 1px solid var(--primary-blue) !important;
+            color: var(--primary-blue) !important;
+            padding: 5px 10px !important;
+            border-radius: 8px;
+            font-weight: 700 !important;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.15);
+        }
+
+        @media(max-width: 900px) {
+            header { flex-direction: column; gap: 10px; padding: 10px 2%; }
+            nav ul { justify-content: center; gap: 8px; }
+            nav ul li a { font-size: 0.7rem; }
+        }
+
+        .main-content { padding: 140px 5% 60px; max-width: 1000px; margin: 0 auto; width: 100%; flex-grow: 1; }
+        .section-title { text-align: center; font-size: 2.3rem; margin-bottom: 10px; font-weight: 900; }
+        .section-title span { background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 1rem; }
+
+        .phone-check-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; margin-bottom: 30px; text-align: center; }
+        .phone-check-box h3 { margin-bottom: 15px; font-size: 1.2rem; color: #fff; }
+        .phone-input-group { display: flex; gap: 10px; max-width: 450px; margin: 0 auto; }
+        .phone-input-group input { flex: 1; padding: 10px 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); border-radius: 8px; color: #fff; outline: none; }
+        .phone-input-group button { background: var(--accent-gradient); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .phone-input-group button:hover { opacity: 0.9; }
+
+        .orders-list { display: flex; flex-direction: column; gap: 20px; }
+        .order-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; transition: 0.3s; }
+        .order-card:hover { border-color: var(--primary-blue); box-shadow: 0 5px 20px rgba(0, 210, 255, 0.1); }
+        
+        .order-info h4 { font-size: 1.1rem; color: var(--primary-blue); margin-bottom: 8px; }
+        .order-info p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 4px; }
+        .order-info p span { color: #fff; font-weight: 600; }
+
+        .order-status { padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; background: rgba(255, 193, 7, 0.15); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.3); }
+        .order-status.completed { background: rgba(37, 211, 102, 0.15); color: #25d366; border-color: rgba(37, 211, 102, 0.3); }
+
+        .no-orders { text-align: center; color: var(--text-muted); padding: 40px; background: var(--card-bg); border-radius: 15px; border: 1px solid var(--border-color); }
+
+        footer { text-align: center; padding: 25px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; background: var(--bg-color); }
     </style>
 </head>
 <body>
 
-    <div class="page-header">
-        <h1><i class="fa-solid fa-bag-shopping"></i> سلتي وطلباتي</h1>
-        <p>تابع حالة طلباتك الحالية وتعرف على المنتجات التي قمت بطلبها لحظة بلحظة</p>
-    </div>
+    <header id="mainHeader">
+        <a href="index.html" class="logo-container">
+            <img src="descard.jpg" alt="Logo" onerror="this.style.display='none'">
+            <span class="logo-text">Des Program</span>
+        </a>
+        
+        <nav>
+            <ul>
+                <li><a href="index.html"><i class="fa-solid fa-house"></i> الرئيسية</a></li>
+                <li><a href="products.html"><i class="fa-solid fa-box-open"></i> المنتجات والطلب</a></li>
+                <li><a href="services.html"><i class="fa-solid fa-layer-group"></i> خدماتنا</a></li>
+                <li><a href="about.html"><i class="fa-solid fa-circle-info"></i> من نحن</a></li>
+                <li><a href="contact.html"><i class="fa-solid fa-headset"></i> تواصل معنا</a></li>
+                <li><a href="orders.html" class="cart-nav-btn active"><i class="fa-solid fa-bag-shopping"></i> سلتي وطلباتي</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <!-- خطوة 1: إدخال رقم الهاتف -->
-    <div class="login-box" id="loginBox">
-        <h3>أدخل رقم هاتفك لعرض مشترياتك وطلباتك</h3>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">يجب أن يكون نفس الرقم الذي استخدمته عند إتمام الطلب.</p>
-        <div class="input-group">
-            <input type="tel" id="phoneInput" placeholder="مثال: 0591234567" required>
-            <button onclick="loadClientOrders()"><i class="fa-solid fa-search"></i> عرض طلباتي</button>
+    <div class="main-content">
+        <h2 class="section-title">طلباتي <span>السابقة</span></h2>
+        <p class="section-subtitle">تابع حالة طلباتك الحالية والسابقة بكل سهولة</p>
+
+        <div class="phone-check-box">
+            <h3>أدخل رقم هاتفك لعرض طلباتك:</h3>
+            <div class="phone-input-group">
+                <input type="tel" id="checkPhoneInput" placeholder="05xxxxxxxx">
+                <button onclick="fetchClientOrders()">عرض الطلبات</button>
+            </div>
+        </div>
+
+        <div class="orders-list" id="ordersContainer">
+            <div class="no-orders">الرجاء إدخال رقم الهاتف لعرض الطلبات المرتبطة به.</div>
         </div>
     </div>
 
-    <!-- خطوة 2: عرض قائمة الطلبات -->
-    <div class="orders-section" id="ordersSection">
-        <div class="client-info-bar">
-            <div>عرض طلبات الرقم: <span id="displayPhone">---</span></div>
-            <button class="change-phone-btn" onclick="resetPhone()"><i class="fa-solid fa-rotate-right"></i> تغيير الرقم</button>
-        </div>
-
-        <div class="orders-grid" id="clientOrdersContainer">
-            <!-- سيتم حقن الطلبات هنا برمجياً -->
-        </div>
-    </div>
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 Des Program • Code • Create • Solve</p>
+    </footer>
 
     <script>
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('mainHeader');
+            if (window.pageYOffset > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForDesProgram...",
             authDomain: "desprogram-89c6a.firebaseapp.com",
@@ -117,135 +139,62 @@
             messagingSenderId: "123456789",
             appId: "1:1234:web:1234"
         };
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.firestore();
 
-        let unsubscribeOrders = null;
-        let unsubscribeNotifs = null;
-
-        // التحقق إذا كان الزبون مسجلاً رقمه مسبقاً في متصفحه (LocalStorage)
-        window.onload = function() {
+        window.addEventListener('DOMContentLoaded', () => {
             const savedPhone = localStorage.getItem('des_client_phone');
-            if (savedPhone) {
-                document.getElementById('phoneInput').value = savedPhone;
-                loadClientOrders();
+            if(savedPhone) {
+                document.getElementById('checkPhoneInput').value = savedPhone;
+                fetchClientOrders();
             }
-        }
+        });
 
-        function loadClientOrders() {
-            const phone = document.getElementById('phoneInput').value.trim();
-            if (!phone) {
-                alert("الرجاء إدخال رقم الهاتف بشكل صحيح.");
+        function fetchClientOrders() {
+            const phone = document.getElementById('checkPhoneInput').value.trim();
+            const container = document.getElementById('ordersContainer');
+
+            if(!phone) {
+                alert("الرجاء إدخال رقم الهاتف");
                 return;
             }
 
-            // حفظ الرقم محلياً لكي لا يضطر لإدخاله في كل مرة يزور فيها الصفحة
             localStorage.setItem('des_client_phone', phone);
-            
-            document.getElementById('loginBox').style.display = 'none';
-            document.getElementById('ordersSection').classList.add('active');
-            document.getElementById('displayPhone').innerText = phone;
+            container.innerHTML = `<div class="no-orders">جاري البحث عن الطلبات...</div>`;
 
-            // جلب الطلبات المرتبطة برقم الهاتف بشكل حي (Real-time listener)
-            if (unsubscribeOrders) unsubscribeOrders(); // إلغاء الاتصال السابق إن وجد
+            db.collection("orders").where("clientPhone", "==", phone).get()
+            .then((querySnapshot) => {
+                if(querySnapshot.empty) {
+                    container.innerHTML = `<div class="no-orders">لا توجد طلبات مسجلة برقم الهاتف هذا.</div>`;
+                    return;
+                }
 
-            unsubscribeOrders = db.collection("orders")
-                .where("clientPhone", "==", phone)
-                .orderBy("timestamp", "desc")
-                .onSnapshot((snapshot) => {
-                    const container = document.getElementById('clientOrdersContainer');
-                    container.innerHTML = "";
-
-                    if (snapshot.empty) {
-                        container.innerHTML = `<div class="no-orders-msg"><i class="fa-solid fa-box-open" style="font-size: 2.5rem; margin-bottom: 10px; display: block; color: var(--primary-blue);"></i>لا توجد أي طلبات مسجلة بهذا الرقم حتى الآن.</div>`;
-                        return;
-                    }
-
-                    snapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const isCompleted = data.status === "completed";
-                        const statusClass = isCompleted ? "status-completed" : "status-pending";
-                        const statusText = isCompleted ? "تم التجهيز وجاهز للاستلام 🚀" : "قيد التجهيز ⏳";
-                        
-                        let timeString = "قيد المعالجة";
-                        if (data.timestamp) {
-                            timeString = data.timestamp.toDate().toLocaleString('ar-EG');
-                        }
-
-                        let extraDetailsHtml = "";
-                        if (data.designDetails) {
-                            extraDetailsHtml = `<div class="extra-box"><strong>التفاصيل:</strong> ${data.designDetails}</div>`;
-                        } else if (data.websiteLink) {
-                            extraDetailsHtml = `<div class="extra-box"><strong>الرابط:</strong> <a href="${data.websiteLink}" target="_blank">${data.websiteLink}</a></div>`;
-                        }
-
-                        container.innerHTML += `
-                            <div class="order-card">
-                                <div class="order-header">
-                                    <span class="order-id">#${doc.id.substring(0, 6)}</span>
-                                    <span class="status-badge ${statusClass}">${statusText}</span>
-                                </div>
-                                <div class="order-item-title"><i class="fa-solid fa-cube"></i> ${data.selectedProduct || 'منتج'}</div>
-                                <div class="order-detail"><i class="fa-solid fa-city" style="width: 20px; color: var(--primary-purple);"></i> المدينة: <span>${data.clientCity || 'غير متوفر'}</span></div>
-                                <div class="order-detail"><i class="fa-solid fa-location-dot" style="width: 20px; color: var(--primary-purple);"></i> العنوان: <span>${data.clientAddress || 'غير متوفر'}</span></div>
-                                <div class="order-detail"><i class="fa-regular fa-clock" style="width: 20px; color: var(--primary-purple);"></i> وقت الطلب: <span>${timeString}</span></div>
-                                ${extraDetailsHtml}
+                let html = '';
+                querySnapshot.forEach((doc) => {
+                    let data = doc.data();
+                    let statusClass = data.status === 'مكتمل' ? 'completed' : '';
+                    html += `
+                        <div class="order-card">
+                            <div class="order-info">
+                                <h4><i class="fa-solid fa-box"></i> ${data.selectedProduct}</h4>
+                                <p>الكمية: <span>${data.quantity}</span></p>
+                                <p>طريقة الاستلام: <span>${data.deliveryMethod}</span></p>
+                                <p>العنوان/المنطقة: <span>${data.clientCity || 'نقطة الاستلام المجانية - قلقيلية - beetle sweet'}</span></p>
                             </div>
-                        `;
-                    });
-                }, (error) => {
-                    console.error("خطأ في جلب الطلبات: ", error);
-                    // في حال تطلب الأمر مؤشر Index في فايرستور، ستظهر رسالة الخطأ هنا أو يفضل جلب الطلبات بدون OrderBy مؤقتاً
+                            <div class="order-status ${statusClass}">
+                                <i class="fa-solid fa-clock"></i> ${data.status || 'قيد المراجعة'}
+                            </div>
+                        </div>
+                    `;
                 });
-
-            // تفعيل الاستماع للإشعارات الخاصة بهذا الزبون (مثل إشعارات فيسبوك/إنستغرام)
-            listenToClientNotifications(phone);
-        }
-
-        function listenToClientNotifications(phone) {
-            if (unsubscribeNotifs) unsubscribeNotifs();
-
-            unsubscribeNotifs = db.collection("client_notifications")
-                .where("clientPhone", "==", phone)
-                .orderBy("timestamp", "desc")
-                .onSnapshot((snapshot) => {
-                    snapshot.docChanges().forEach((change) => {
-                        if (change.type === "added") {
-                            const notif = change.doc.data();
-                            showNotificationToast(notif.title, notif.message);
-                        }
-                    });
-                });
-        }
-
-        function showNotificationToast(title, message) {
-            // إزالة أي إشعار سابق إن وجد
-            const oldToast = document.getElementById('activeToast');
-            if (oldToast) oldToast.remove();
-
-            const toast = document.createElement('div');
-            toast.id = 'activeToast';
-            toast.className = 'toast-notification';
-            toast.innerHTML = `
-                <div style="background: var(--accent-gradient); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <i class="fa-solid fa-bell" style="color: #fff;"></i>
-                </div>
-                <div>
-                    <h4 style="margin: 0 0 4px 0; font-size: 0.95rem; color: var(--primary-blue);">${title}</h4>
-                    <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">${message}</p>
-                </div>
-            `;
-            document.body.appendChild(toast);
-            setTimeout(() => { if(toast) toast.remove(); }, 6000);
-        }
-
-        function resetPhone() {
-            localStorage.removeItem('des_client_phone');
-            if (unsubscribeOrders) unsubscribeOrders();
-            if (unsubscribeNotifs) unsubscribeNotifs();
-            document.getElementById('ordersSection').classList.remove('active');
-            document.getElementById('loginBox').style.display = 'block';
-            document.getElementById('phoneInput').value = '';
+                container.innerHTML = html;
+            })
+            .catch((error) => {
+                console.error("Error getting documents: ", error);
+                container.innerHTML = `<div class="no-orders">حدث خطأ أثناء جلب الطلبات، يرجى المحاولة لاحقاً.</div>`;
+            });
         }
     </script>
 </body>
